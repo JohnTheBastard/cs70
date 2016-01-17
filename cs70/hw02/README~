@@ -1,0 +1,121 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 2
+Date:		2 February, 2004
+
+
+Purpose of Program
+------------------
+
+This program is designed to automatically read through code and note some kinds
+of potential style problems. The user is notified of lines longer than 
+MAX_LENGTH, lines with sequences of capital letters and enclosed space longer
+than MAX_CAPS, instances of the keyword 'goto', and lines with poorly 
+formatted '//' comments (those lacking surrounding whitespace).
+
+
+I/O Format
+----------
+
+Input is any text file, presumably C++. The file name is provided on the 
+command line with usage 
+	bash$ assign_02 < "FILENAME".
+
+Output is printed to the screen. Each time a style violation is found, the
+line number and type of the violation are printed. 
+
+For a line that exceeds the maximum allowed length, the output reads:
+Line <n> is too long: <m> characters.
+
+For lines containing a string of capitals that is too long, the output reads:
+Line <n> has a string of <m> capital letters and spaces.
+
+For lines containing 'goto', the output reads:
+Line <n> seems to contain a goto statement.
+
+For lines with a '//' comment without surrounding whitespace, the output is:
+Line <n> contains a // comment without surrounding whitespace.
+
+
+General Structure
+-----------------
+
+The code uses four helper functions along with the provided readdumbline 
+function. The readdumbline gets a line of input from the file. Then separate 
+functions are called, one for each type of error. The four functions used are:
+
+lenCheck - verifies that no line exceeds MAX_LENGTH characters, including
+tab spaces.
+
+capsCheck - checks that no string of capitals and enclosed whitespace has
+length exceeding the specified MAX_CAPS.
+
+gotoCheck - looks for possible 'goto' statements.
+
+commentCheck - ensures that every '//' comment is surrounded by whitespace.
+
+
+Files
+-----
+
+Four files contain the code for this program. 
+
+assign_02.cc - consists of a main function and the four functions mentioned
+above in the general structure portion.
+
+dumbreadline.cc - contains the code for reading single lines from an input file
+and returning them as a character array.
+
+dumbreadline.hh - header file for dumbreadline.
+
+assign_02_verbose.cc - is the original version of assign_02.cc which we wrote 
+to include debugging output.  Unfortunately, the debugging code hampers 
+readability of the file.  Since style and readability is of utmost importance 
+in this assignment, we removed the debugging portion of the code from the 
+assign_02.cc file.  However, the debugging functionality would be very useful 
+were someone to continue development of the program we started, and so we are 
+maintaining this archived version of the complete implementation.
+
+hw02-input1.txt - a simple sample input for basic testing of the program's 
+functionality.
+
+hw02-input2.txt - a more complex sample input intended for extensive testing
+of the programs handling of specific special case scenarios.
+
+hw02-output1.txt - sample of correct program output if run on hw02-input1.txt.
+
+hw02-output2.txt - sample of correct program output if run on hw02-input2.txt.
+
+
+Limitations and Possible Improvements
+-------------------------------------
+
+One limitation we faced was restriction from using the standard string 
+classes in C++.  We didn't have much need of them, but they could have made 
+the debugging code (in assign_02_verbose.cc) a little cleaner.  
+
+We also ran into style issues in some of our flow control.  We have some if 
+and while statements that are fairly deeply nested.  Maintaining proper 
+formatting of our comments generally resulted in excess space between brackets,
+which makes the overall structure of the flow control less obvious.  More 
+problematic were some of the conditions that determined flow through the ifs 
+and whiles.  The length of the conditions, like 
+
+isspace(buffer[currentPosition + currentCapCount + spaceCount])
+
+are not easily readable.  However, after discussing this with Prof. Kuenning 
+as well as one of the cs70 tutors, we came to the conclusion that any changes 
+we made that would shorten the conditions and make them more readable only 
+sacrificed other desirable traits like consistency and understandability.  We 
+considered using variables that were given a conditions value, or even #define
+statements instead of the actual condition, but decided that forcing the reader
+to look elsewhere in the code to figure out the meaning of the condition was 
+worse than having to spend a few extra seconds reading it.  We also considered
+shortening the length of the variable names, but this also sacrificed 
+understandability for the sake of style.
+
+There is really no end to the improvements possible to the program.  It 
+implements only the most basic style checking functionality.  There are many
+aspects of style that could be checked besides the 4 features we used: use of
+white space, adequate commenting, and comment formatting are just a few 
+functions that might be added.

@@ -1,0 +1,47 @@
+Current database:
+L1234566 Geoff Kuenning's mom 1/1/1901
+L1234567 Geoff Kuenning's dad 1/1/1901
+M1234566 Geoff Kuenning's grandma 1/1/1875
+M1234567 Geoff Kuenning 1/1/1922
+N7654320 Jon Strauss's dad 2/14/1924
+N7654321 Jon Strauss 2/14/1944
+O7654321 Jon Strauss's mom 2/14/1924
+-----
+Found: M1234567 Geoff Kuenning 1/1/1922
+Found: N7654321 Jon Strauss 2/14/1944
+Found: L1234567 Geoff Kuenning's dad 1/1/1901
+Found: L1234566 Geoff Kuenning's mom 1/1/1901
+Found: M1234566 Geoff Kuenning's grandma 1/1/1875
+Found: N7654320 Jon Strauss's dad 2/14/1924
+Found: O7654321 Jon Strauss's mom 2/14/1924
+Attempt to re-insert existing driver: M1234566 Geoff Kuenning's grandma 1/1/1875
+Attempt to re-insert existing driver: N7654320 Jon Strauss's dad 2/14/1924
+Not found: A1111111
+Not found: O1234567
+Not found: M1234999
+Not found: L1234566
+Not found: M1234566
+Not found: N7654321
+Not found: M1234567
+Found: L1234567 Geoff Kuenning's dad 1/1/1901
+Found: N7654320 Jon Strauss's dad 2/14/1924
+Found: O7654321 Jon Strauss's mom 2/14/1924
+Current database:
+L1234567 Geoff Kuenning's dad 1/1/1901
+N7654320 Jon Strauss's dad 2/14/1924
+O7654321 Jon Strauss's mom 2/14/1924
+-----
+Not found: L1234567
+Not found: N7654320
+Not found: O7654321
+Current database:
+-----
+Not legal on 2/14/1944: N7654320 Jon Strauss's dad 2/14/1924
+Not legal on 2/13/1945: N7654320 Jon Strauss's dad 2/14/1924
+Not legal on 1/14/1945: N7654320 Jon Strauss's dad 2/14/1924
+Not legal on 12/31/1944: N7654320 Jon Strauss's dad 2/14/1924
+Legal on 2/14/1945: N7654320 Jon Strauss's dad 2/14/1924
+Legal on 2/15/1945: N7654320 Jon Strauss's dad 2/14/1924
+Legal on 3/13/1945: N7654320 Jon Strauss's dad 2/14/1924
+Legal on 12/31/1945: N7654320 Jon Strauss's dad 2/14/1924
+Legal on 1/1/1946: N7654320 Jon Strauss's dad 2/14/1924

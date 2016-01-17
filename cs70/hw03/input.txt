@@ -1,0 +1,49 @@
+student Fred Sample blond
+student Joe Blow brown
+student Sally Silly green
+student Alfred Merriweather yellow
+student Sam Sleepy purple
+student Jerry Johnson orange
+
+hair Jerry Johnson red
+
+course CS 70 TT 1:15 45
+course CS 134 MW 2:45 3
+course MATH 55 MTWTF 8:00 7
+course HUM 13 MTWTF 9:00 10
+course HUM 22 MTWTF 10:00 5
+course PHYS 19 MTTF 11:00 5
+course CHEM 1 M 4:00 5
+
+show students show courses
+
+enroll Fred Sample CS 70
+enroll Joe Blow CS 70
+enroll Sally Silly CS 134
+enroll Alfred Merriweather CS 134
+enroll Jerry Johnson CS 134
+enroll Sally Silly CS 134
+
+enroll Fred Sample HUM 13
+enroll Fred Sample HUM 22
+enroll Fred Sample MATH 55
+enroll Fred Sample CS 134
+enroll Fred Sample PHYS 19
+enroll Fred Sample
+
+drop Fred Sample PHYS 19
+enroll Fred Sample CHEM 1
+
+hair Fred Simple
+drop Fred Sample PHY 19
+
+time CHEM 1 TT 3:00
+
+student Fred Sample blond
+course CS 70 TT 1:15 45
+
+badcommand
+show whom
+
+show students
+show courses

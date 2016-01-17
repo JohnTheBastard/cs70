@@ -1,0 +1,80 @@
+#include <iostream>
+// File assign_01.cc 
+// This file is a test program for the rat class contained in
+// the files rat.cc and rat.hh
+// Date Modified: 25 January 2004
+// Modified By: Russ Osborn and John Hearn
+
+// Original author's comments left in all caps typeface.
+
+#include <stdexcept>
+#include "rat.hh"
+
+using namespace	std;
+
+int main(int, char*[] )
+{
+  //Declare four rationals for testing
+  
+  rat p1 (1,8);
+  // p2 IS 2 IN 3
+  rat p2 (2, 3);
+  // P(BOTH TOGETHER) IS PRODUCT
+  rat p3 = p1 * p2;
+  // P(EITHER INDEPENDENT) IS SUM
+  rat p4 = p1 + p2;
+  
+  // WHAT IS ANSWER?
+  cout << "combined prob is " << p3 << endl;
+  cout << "independent prob is " << p4 << endl;
+  
+  
+  /* OTHER TEST */
+
+  // Testing comparison and stream i/o operators
+
+  cout << rat(24,32) << endl;
+  
+  cout << rat(13) << endl;
+  
+  cout << rat(-24,-10) << endl;
+  
+  cout << rat(-24,10) << endl;
+  
+  rat x;
+  cout << x << endl;
+  
+  if( p4 == (p1 + p2) )
+    {
+      cout << "yes" << endl;
+    }
+  
+  if ( p1 < p2 )
+    {
+      cout << "yup" << endl;
+    }
+  
+  cout << p4 - p3 << endl;
+  cout << p2 * p1 << ' ' << p1 / p2 << endl;
+
+
+  // test exception handling for divide by 0 case.
+
+  try
+    { 
+      rat z(1,0);
+      cout << z << endl;
+    }
+  catch(std::exception& e)
+    {
+      cout << e.what() << endl;
+    }
+  
+  return 0;
+}
+
+
+
+
+
+

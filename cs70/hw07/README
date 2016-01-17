@@ -1,0 +1,164 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 7
+Date:	        26 March, 2004
+
+
+
+Purpose of Program
+------------------
+
+The purpose of this program is to try to find reasonable solutions to the 
+traveling sales rep problem in a short period of time.  This program doesn't 
+necessarily find the shortest tour, but uses a process based on the idea of 
+natural selection to find a relatively short path.
+
+We implemented a linked list structure that represents a chromosome that
+corresponds to a TSR tour.  Recombination is used to find shorter paths.
+
+I/O Format
+----------
+
+INPUT: 
+%>./assign_07 [options] <file>
+
+See assign_07.cc file for option flag documentation.
+
+The input file format is (per line)
+
+<City Name> <longitude> <latitude>
+
+Example:
+Los-Angeles 34.0500 -118.233
+
+OUTPUT:
+Total distance: <value>
+
+
+General Structure
+-----------------
+
+This program is contained within 15 files. The following files were provided:
+
+assign_07.cc	main program that calls functions and processes arguments
+city.*		basic object of the TSR problem
+colony.*	collection of organisms, with functions for simulating
+		natural selection
+mtwist.*	a fast number generation package
+organism.*	list of genes that define a trial solution to the problem
+randistrs.*	generates random numbers from various distributions
+
+We provided both intlist.cc and intlist.hh whose functions are as follows:
+
+METHODS:
+
+We implemented the following public methods:
+
+IntList::IntList()
+
+  Default constructor.
+	
+IntList::IntList(const IntList& source)
+
+  Copy constructor.
+
+IntList::~IntList()
+
+  Destructor.
+
+IntList& IntList::operator= (const IntList& source)
+
+  Assignment operator - deletes all data currently stored in the
+list. Then all values from the source list are pushed on to this list
+and it is returned.
+
+int IntList::popHead()
+
+  Removes and returns the first value from the list and deletes the
+node storing it. The next node is now marked as the head. If no data is in the
+list, an error message is printed.
+
+void IntList::pushTail(int value)
+
+  A new node storing value is created and placed on the tail of the
+list. The tail pointer is modified accordingly.
+
+int IntList::length() const
+
+  Returns the length of the list in O(1) time.
+
+IntList::Node::Node()
+
+  Default Node constructor.
+
+IntList::Node::~Node()
+
+  Node destructor.
+
+IntListIterator::IntListIterator(const IntList& source)
+
+  IntListIterator constructor - the IntList over which to iterate is specified.
+
+IntListIterator::IntListIterator(const IntListIterator& source)
+
+  IntListIterator copy constructor.				      
+
+IntListIterator::~IntListIterator()
+
+  IntListIterator destructor.
+
+IntListIterator& IntListIterator::operator= (const IntListIterator& source)
+
+  IntListIterator assignment operator.
+
+IntListIterator::operator bool() const
+
+  Returns true if there are remaining elements in the IntList to
+iterate over. False otherwise.
+
+IntListIterator& IntListIterator::operator++ ()
+
+  Pre-increment operator - Moves to the next element in the 
+IntList if there is one. Prints an error if there are no more
+remaining elements to iterate over.
+
+int& IntListIterator::operator* ()
+
+  Returns the value stored in the node of the current position. This
+value may be modified without invalidating the iterator.
+  
+DATA STRUCTURES:
+
+IntList
+
+  Linked list of Nodes, which store integers. Stores only pointers to
+the head and tail of the list as well as the length of the list.
+
+Node
+
+  Element of a linked list of integers. Contains the data stored and a
+pointer to the next Node in the list.
+
+IntListIterator
+
+  Iterates over an IntList. It stores a pointer to the current element
+and can return its value (allowing the user to modify the data).
+
+ALGORITHMS:
+
+  The larger collection of files implement a genetic algorithm to
+solve a traveling salesman problem. For details on this, see the
+Spring CS70 Course web page, assignment 7.
+
+Limitations and Possible Improvements
+-------------------------------------
+
+  This code currently only supports storage for integers. Use of
+templates would allow it to store any generic data. Also, the current
+implementation lacks pushHead, popTail, and isEmpty functions. 
+
+  The iterator class currently does not have a reset function to start
+the iterator again at the beginning of the list. It also does not have
+a post-increment operator. No other operators are included, but there
+is no clear use for them.
+

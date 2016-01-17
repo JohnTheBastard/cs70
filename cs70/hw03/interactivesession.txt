@@ -1,0 +1,291 @@
+bow:65) ./assign_03
+
+Commands are:
+  quit: terminate program
+  help: print this message
+  student: add new student
+  course: add new course
+  enroll: enroll student in course
+  drop: drop student from course
+  hair: change student's hair color
+  time: change course's meeting time
+  show students: display all students
+  show courses: display all courses
+
+Your command? student
+First name? Fred
+Last name? Sample
+Hair color? blond
+
+Your command? student
+First name? Joe
+Last name? Blow
+Hair color? brown
+
+Your command? student
+First name? Sally
+Last name? Silly
+Hair color? green
+
+Your command? student
+First name? Alfred
+Last name? Merriweather
+Hair color? yellow
+
+Your command? student
+First name? Sam
+Last name? Sleepy
+Hair color? purple
+
+Your command? student
+First name? Jerry
+Last name? Johnson
+Hair color? orange
+
+Your command? hair
+First name? Jerry
+Last name? Johnson
+New hair color? red
+
+Your command? course
+Department? CS
+Course number? 70
+Meeting days? TT
+Meeting time? 1:15
+Maximum enrollment? 45
+
+Your command? course
+Department? CS
+Course number? 134
+Meeting days? MW
+Meeting time? 2:45
+Maximum enrollment? 3
+
+Your command? course
+Department? MATH
+Course number? 55
+Meeting days? MTWTF
+Meeting time? 8:00
+Maximum enrollment? 7
+
+Your command? course
+Department? HUM
+Course number? 13
+Meeting days? MTWTF
+Meeting time? 9:00
+Maximum enrollment? 10
+
+Your command? course
+Department? HUM
+Course number? 22
+Meeting days? MTWTF
+Meeting time? 10:00
+Maximum enrollment? 5
+
+Your command? course
+Department? PHYS
+Course number? 19
+Meeting days? MTTF
+Meeting time? 11:00
+Maximum enrollment? 5
+
+Your command? course
+Department? CHEM
+Course number? 1
+Meeting days? M
+Meeting time? 4:00
+Maximum enrollment? 5
+
+Your command? show students
+Sample, Fred, blond hair
+	0 courses:
+Blow, Joe, brown hair
+	0 courses:
+Silly, Sally, green hair
+	0 courses:
+Merriweather, Alfred, yellow hair
+	0 courses:
+Sleepy, Sam, purple hair
+	0 courses:
+Johnson, Jerry, red hair
+	0 courses:
+
+Your command? show courses
+CS70 meets TT 1:15
+	Roster:
+CS134 meets MW 2:45
+	Roster:
+MATH55 meets MTWTF 8:00
+	Roster:
+HUM13 meets MTWTF 9:00
+	Roster:
+HUM22 meets MTWTF 10:00
+	Roster:
+PHYS19 meets MTTF 11:00
+	Roster:
+CHEM1 meets M 4:00
+	Roster:
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? CS
+Course number? 70
+
+Your command? enroll
+First name? Joe
+Last name? Blow
+Department? CS
+Course number? 70
+
+Your command? enroll
+First name? Sally
+Last name? Silly
+Department? CS
+Course number? 134
+
+Your command? enroll
+First name? Alfred
+Last name? Merriweather
+Department? CS
+Course number? 134
+
+Your command? enroll
+First name? Jerry
+Last name? Johnson
+Department? CS
+Course number? 134
+
+Your command? enroll
+First name? Sally
+Last name? Silly
+Department? CS
+Course number? 134
+Course CS134 is full, can't add another student
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? HUM
+Course number? 13
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? HUM
+Course number? 22
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? MATH
+Course number? 55
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? CS
+Course number? 134
+Course CS134 is full, can't add another student
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? PHYS
+Course number? 19
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Student Sample, Fred at maximum load, can't add another course
+
+Your command? drop
+First name? Fred
+Last name? Sample
+Department? PHYS
+Course number? 19
+
+Your command? enroll
+First name? Fred
+Last name? Sample
+Department? CHEM
+Course number? 1
+
+Your command? hair
+First name? Fred
+Last name? Simple
+Student Simple, Fred was not found
+
+Your command? drop
+First name? Fred
+Last name? Sample
+Department? PHY
+Course number? 19
+Course PHY19 was not found
+
+Your command? time
+Department? CHEM
+Course number? 1
+New meeting days? TT
+New meeting time? 3:00
+
+Your command? student
+First name? Fred
+Last name? Sample
+Hair color? blond
+Student Sample, Fred is already in the database
+
+Your command? course
+Department? CS
+Course number? 70
+Meeting days? TT
+Meeting time? 1:15
+Maximum enrollment? 45
+Course CS70 is already in the database
+
+Your command? badcommand
+Unrecognized command 'badcommand'.  Try again.
+
+Your command? show whom
+Unrecognized argument to 'show' command: 'whom'
+
+Your command? show students
+Sample, Fred, blond hair
+	5 courses: CS70 HUM13 HUM22 MATH55 CHEM1
+Blow, Joe, brown hair
+	1 course: CS70
+Silly, Sally, green hair
+	1 course: CS134
+Merriweather, Alfred, yellow hair
+	1 course: CS134
+Sleepy, Sam, purple hair
+	0 courses:
+Johnson, Jerry, red hair
+	1 course: CS134
+
+Your command? show courses
+CS70 meets TT 1:15
+	Roster:
+	Blow, Joe
+	Sample, Fred
+CS134 meets MW 2:45
+	Roster:
+	Johnson, Jerry
+	Merriweather, Alfred
+	Silly, Sally
+MATH55 meets MTWTF 8:00
+	Roster:
+	Sample, Fred
+HUM13 meets MTWTF 9:00
+	Roster:
+	Sample, Fred
+HUM22 meets MTWTF 10:00
+	Roster:
+	Sample, Fred
+PHYS19 meets MTTF 11:00
+	Roster:
+CHEM1 meets TT 3:00
+	Roster:
+	Sample, Fred
+
+Your command? 

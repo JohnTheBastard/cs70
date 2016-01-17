@@ -1,0 +1,206 @@
+Starting drinker scheduled for 2:28 at 2:28
+drinker scheduled for 2:28 serviced in 9
+Starting drinker scheduled for 3:00 at 3:00
+drinker scheduled for 3:00 serviced in 14
+Starting server scheduled for 13:41 with 6 drink(s) at 13:41
+server scheduled for 13:41 serviced in 3:53
+Starting drinker scheduled for 16:34 at 17:34
+Suspending drinker scheduled for 16:34 at 18:09
+Starting server scheduled for 18:09 with 10 drink(s) at 18:09
+server scheduled for 18:09 serviced in 8:29
+Starting drinker scheduled for 16:34 at 26:38
+drinker scheduled for 16:34 serviced in 10:43 (9:39 extra)
+Starting drinker scheduled for 18:58 at 27:17
+drinker scheduled for 18:58 serviced in 8:39 (8:19 extra)
+Starting drinker scheduled for 26:24 at 27:37
+Suspending drinker scheduled for 26:24 at 27:53
+Starting server scheduled for 27:53 with 7 drink(s) at 27:53
+server scheduled for 27:53 serviced in 3:34
+Starting server scheduled for 29:20 with 9 drink(s) at 31:27
+server scheduled for 29:20 serviced in 5:28 (2:07 extra)
+Starting server scheduled for 31:53 with 7 drink(s) at 34:48
+server scheduled for 31:53 serviced in 9:56 (2:55 extra)
+Starting server scheduled for 35:00 with 10 drink(s) at 41:49
+server scheduled for 35:00 serviced in 15:22 (6:49 extra)
+Starting server scheduled for 39:43 with 4 drink(s) at 50:22
+server scheduled for 39:43 serviced in 11:14 (10:39 extra)
+Starting server scheduled for 40:01 with 1 drink(s) at 50:57
+server scheduled for 40:01 serviced in 11:39 (10:56 extra)
+Starting server scheduled for 49:13 with 10 drink(s) at 51:40
+server scheduled for 49:13 serviced in 7:41 (2:27 extra)
+Starting drinker scheduled for 26:24 at 56:54
+drinker scheduled for 26:24 serviced in 31:03 (30:24 extra)
+Starting drinker scheduled for 27:34 at 57:27
+drinker scheduled for 27:34 serviced in 29:53 (29:53 extra)
+Starting drinker scheduled for 29:03 at 57:27
+Suspending drinker scheduled for 29:03 at 58:24
+Starting server scheduled for 58:24 with 1 drink(s) at 58:24
+server scheduled for 58:24 serviced in 21
+Starting drinker scheduled for 29:03 at 58:45
+drinker scheduled for 29:03 serviced in 30:01 (28:55 extra)
+Starting drinker scheduled for 43:25 at 59:04
+Suspending drinker scheduled for 43:25 at 59:45
+Starting server scheduled for 59:45 with 5 drink(s) at 59:45
+server scheduled for 59:45 serviced in 3:20
+Starting server scheduled for 1:01:22 with 7 drink(s) at 1:03:05
+server scheduled for 1:01:22 serviced in 12:31 (1:43 extra)
+Starting server scheduled for 1:06:13 with 3 drink(s) at 1:13:53
+server scheduled for 1:06:13 serviced in 9:24 (7:40 extra)
+Starting server scheduled for 1:10:35 with 5 drink(s) at 1:15:37
+server scheduled for 1:10:35 serviced in 9:24 (5:02 extra)
+Starting server scheduled for 1:14:31 with 4 drink(s) at 1:19:59
+server scheduled for 1:14:31 serviced in 10:49 (5:28 extra)
+Starting server scheduled for 1:23:12 with 5 drink(s) at 1:25:20
+server scheduled for 1:23:12 serviced in 4:57 (2:08 extra)
+Starting drinker scheduled for 43:25 at 1:28:09
+drinker scheduled for 43:25 serviced in 46:05 (44:13 extra)
+Starting drinker scheduled for 48:23 at 1:29:30
+drinker scheduled for 48:23 serviced in 41:14 (41:07 extra)
+Starting drinker scheduled for 51:00 at 1:29:37
+drinker scheduled for 51:00 serviced in 39:22 (38:37 extra)
+Starting drinker scheduled for 1:02:21 at 1:30:22
+drinker scheduled for 1:02:21 serviced in 28:04 (28:01 extra)
+Starting drinker scheduled for 1:10:29 at 1:30:25
+drinker scheduled for 1:10:29 serviced in 20:11 (19:56 extra)
+Starting drinker scheduled for 1:14:22 at 1:30:40
+drinker scheduled for 1:14:22 serviced in 17:43 (16:18 extra)
+Starting drinker scheduled for 1:15:52 at 1:32:05
+drinker scheduled for 1:15:52 serviced in 17:39 (16:13 extra)
+Starting drinker scheduled for 1:20:35 at 1:33:31
+drinker scheduled for 1:20:35 serviced in 14:05 (12:56 extra)
+Starting server scheduled for 1:35:01 with 4 drink(s) at 1:35:01
+server scheduled for 1:35:01 serviced in 2:08
+Starting server scheduled for 1:45:44 with 8 drink(s) at 1:45:44
+server scheduled for 1:45:44 serviced in 2:34
+Starting server scheduled for 1:54:47 with 5 drink(s) at 1:54:47
+server scheduled for 1:54:47 serviced in 2:13
+Starting server scheduled for 1:55:20 with 7 drink(s) at 1:57:00
+server scheduled for 1:55:20 serviced in 5:37 (1:40 extra)
+Starting server scheduled for 1:58:08 with 3 drink(s) at 2:00:57
+server scheduled for 1:58:08 serviced in 3:42 (2:49 extra)
+Starting drinker scheduled for 2:03:58 at 2:03:58
+drinker scheduled for 2:03:58 serviced in 17
+Starting drinker scheduled for 2:06:17 at 2:06:17
+drinker scheduled for 2:06:17 serviced in 15
+Starting server scheduled for 2:15:00 with 5 drink(s) at 2:15:00
+server scheduled for 2:15:00 serviced in 2:56
+Starting server scheduled for 2:16:38 with 6 drink(s) at 2:17:56
+server scheduled for 2:16:38 serviced in 6:33 (1:18 extra)
+Starting drinker scheduled for 2:18:26 at 2:23:11
+drinker scheduled for 2:18:26 serviced in 4:53 (4:45 extra)
+Starting server scheduled for 2:24:25 with 10 drink(s) at 2:24:25
+server scheduled for 2:24:25 serviced in 7:32
+Starting server scheduled for 2:26:05 with 2 drink(s) at 2:31:57
+server scheduled for 2:26:05 serviced in 7:36 (5:52 extra)
+Starting server scheduled for 2:30:38 with 7 drink(s) at 2:33:41
+server scheduled for 2:30:38 serviced in 8:01 (3:03 extra)
+Starting server scheduled for 2:37:10 with 5 drink(s) at 2:38:39
+server scheduled for 2:37:10 serviced in 4:47 (1:29 extra)
+Starting server scheduled for 2:41:06 with 8 drink(s) at 2:41:57
+server scheduled for 2:41:06 serviced in 8:17 (51 extra)
+Starting server scheduled for 2:44:02 with 3 drink(s) at 2:49:23
+server scheduled for 2:44:02 serviced in 6:30 (5:21 extra)
+Starting server scheduled for 2:48:04 with 3 drink(s) at 2:50:32
+server scheduled for 2:48:04 serviced in 3:05 (2:28 extra)
+Starting drinker scheduled for 2:43:49 at 2:51:09
+drinker scheduled for 2:43:49 serviced in 7:24 (7:20 extra)
+Starting drinker scheduled for 2:45:14 at 2:51:13
+drinker scheduled for 2:45:14 serviced in 6:59 (5:59 extra)
+Starting drinker scheduled for 2:54:59 at 2:54:59
+drinker scheduled for 2:54:59 serviced in 21
+Starting drinker scheduled for 2:58:05 at 2:58:05
+drinker scheduled for 2:58:05 serviced in 19
+Starting server scheduled for 3:01:34 with 2 drink(s) at 3:01:34
+server scheduled for 3:01:34 serviced in 1:01
+Starting server scheduled for 3:06:49 with 10 drink(s) at 3:06:49
+server scheduled for 3:06:49 serviced in 4:01
+Starting server scheduled for 3:08:17 with 7 drink(s) at 3:10:50
+server scheduled for 3:08:17 serviced in 11:27 (2:33 extra)
+Starting server scheduled for 3:10:03 with 2 drink(s) at 3:19:44
+server scheduled for 3:10:03 serviced in 9:44 (9:41 extra)
+Starting server scheduled for 3:14:56 with 5 drink(s) at 3:19:47
+server scheduled for 3:14:56 serviced in 7:52 (4:51 extra)
+Starting server scheduled for 3:17:49 with 2 drink(s) at 3:22:48
+server scheduled for 3:17:49 serviced in 6:45 (4:59 extra)
+Starting server scheduled for 3:19:22 with 1 drink(s) at 3:24:34
+server scheduled for 3:19:22 serviced in 6:33 (5:12 extra)
+Starting server scheduled for 3:21:29 with 3 drink(s) at 3:25:55
+server scheduled for 3:21:29 serviced in 8:25 (4:26 extra)
+Starting server scheduled for 3:25:43 with 3 drink(s) at 3:29:54
+server scheduled for 3:25:43 serviced in 5:10 (4:11 extra)
+Starting server scheduled for 3:26:12 with 7 drink(s) at 3:30:53
+server scheduled for 3:26:12 serviced in 8:31 (4:41 extra)
+Starting server scheduled for 3:27:11 with 6 drink(s) at 3:34:43
+server scheduled for 3:27:11 serviced in 13:58 (7:32 extra)
+Starting server scheduled for 3:30:34 with 1 drink(s) at 3:41:09
+server scheduled for 3:30:34 serviced in 10:37 (10:35 extra)
+Starting server scheduled for 3:34:11 with 3 drink(s) at 3:41:11
+server scheduled for 3:34:11 serviced in 9:26 (7:00 extra)
+Starting server scheduled for 3:35:35 with 7 drink(s) at 3:43:37
+server scheduled for 3:35:35 serviced in 12:47 (8:02 extra)
+Starting server scheduled for 3:39:28 with 1 drink(s) at 3:48:22
+server scheduled for 3:39:28 serviced in 8:57 (8:54 extra)
+Starting drinker scheduled for 3:07:48 at 3:48:25
+drinker scheduled for 3:07:48 serviced in 41:15 (40:37 extra)
+Starting drinker scheduled for 3:23:05 at 3:49:03
+drinker scheduled for 3:23:05 serviced in 26:19 (25:58 extra)
+Starting drinker scheduled for 3:33:38 at 3:49:24
+drinker scheduled for 3:33:38 serviced in 16:45 (15:46 extra)
+Starting drinker scheduled for 3:38:44 at 3:50:23
+drinker scheduled for 3:38:44 serviced in 12:24 (11:39 extra)
+Starting drinker scheduled for 3:55:02 at 3:55:02
+Suspending drinker scheduled for 3:55:02 at 3:55:21
+Starting server scheduled for 3:55:21 with 6 drink(s) at 3:55:21
+server scheduled for 3:55:21 serviced in 3:59
+Starting server scheduled for 3:58:49 with 3 drink(s) at 3:59:20
+server scheduled for 3:58:49 serviced in 1:35 (31 extra)
+Starting drinker scheduled for 3:55:02 at 4:00:24
+Suspending drinker scheduled for 3:55:02 at 4:00:33
+Starting server scheduled for 4:00:33 with 2 drink(s) at 4:00:33
+server scheduled for 4:00:33 serviced in 59
+Starting drinker scheduled for 3:55:02 at 4:01:32
+drinker scheduled for 3:55:02 serviced in 7:45 (6:22 extra)
+Starting server scheduled for 4:15:29 with 10 drink(s) at 4:15:29
+server scheduled for 4:15:29 serviced in 8:42
+Starting server scheduled for 4:23:27 with 6 drink(s) at 4:24:11
+server scheduled for 4:23:27 serviced in 4:06 (44 extra)
+Starting server scheduled for 4:26:34 with 10 drink(s) at 4:27:33
+server scheduled for 4:26:34 serviced in 8:13 (59 extra)
+Starting server scheduled for 4:28:47 with 10 drink(s) at 4:34:47
+server scheduled for 4:28:47 serviced in 14:46 (6:00 extra)
+Starting server scheduled for 4:31:33 with 8 drink(s) at 4:43:33
+server scheduled for 4:31:33 serviced in 18:23 (12:00 extra)
+Starting server scheduled for 4:31:42 with 6 drink(s) at 4:49:56
+server scheduled for 4:31:42 serviced in 20:58 (18:14 extra)
+Starting server scheduled for 4:33:51 with 10 drink(s) at 4:52:40
+server scheduled for 4:33:51 serviced in 24:36 (18:49 extra)
+Starting server scheduled for 4:40:48 with 8 drink(s) at 4:58:27
+server scheduled for 4:40:48 serviced in 22:42 (17:39 extra)
+Starting server scheduled for 4:44:28 with 10 drink(s) at 5:03:30
+server scheduled for 4:44:28 serviced in 26:34 (19:02 extra)
+Starting server scheduled for 4:51:51 with 6 drink(s) at 5:11:02
+server scheduled for 4:51:51 serviced in 22:07 (19:11 extra)
+Starting server scheduled for 4:57:23 with 6 drink(s) at 5:13:58
+server scheduled for 4:57:23 serviced in 19:10 (16:35 extra)
+Starting server scheduled for 4:58:34 with 4 drink(s) at 5:16:33
+server scheduled for 4:58:34 serviced in 20:16 (17:59 extra)
+Starting server scheduled for 5:01:09 with 7 drink(s) at 5:18:50
+server scheduled for 5:01:09 serviced in 23:30 (17:41 extra)
+Starting drinker scheduled for 4:46:31 at 5:24:39
+drinker scheduled for 4:46:31 serviced in 38:16 (38:08 extra)
+Starting drinker scheduled for 4:48:25 at 5:24:47
+drinker scheduled for 4:48:25 serviced in 36:56 (36:22 extra)
+Starting drinker scheduled for 5:00:19 at 5:25:21
+drinker scheduled for 5:00:19 serviced in 25:05 (25:02 extra)
+Drinker statistics:
+	30 customers served
+	mean time 18:41
+	standard deviation 14:48
+	minimum time 9
+	maximum time 46:05
+Table server statistics:
+	61 servers sold 342 drinks
+	mean time 9:16
+	standard deviation 6:27
+	minimum time 21
+	maximum time 26:34

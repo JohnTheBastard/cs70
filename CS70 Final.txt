@@ -1,0 +1,231 @@
+CS 70 Final Exam
+
+01.   You don't have a return type...thats pretty important.  It also looks 
+      like you are trying to implement a ternary operator.  also, if you 
+      happen to be trying to overload, that wont work with the * operator 
+      regardless. if you are trying to implement code to support the 
+      expression y * z, i think it should look like this:
+      
+      X X::operator+ (const& z) const
+      
+
+      the ensuing code should be written to operate on *this, rather than y.
+
+02.   As it stands, I think it could be a bit confusing.  However, the problem
+      with the style depends on what sort of data type the valve is.  If it
+      is just a float representing  flow rate is then i think the style issue 
+      is the names she uses for the valves.  should be 
+      
+      coolingFlowRate += 0.3;
+ 
+      or something to that effect. If flow rate is just one member of a Valve 
+      data structure then I dont like it.  I think
+
+      coolingValve.flowRate += 0.3;
+      
+      would be ok. as it stands though, its not clear what sshe is increasing
+      or decreasing.  remove 100 flow valves?  open flow valve for .3 minutes?
+      could be anything.
+      
+      On the other I think she has the right idea in changing it to SOMETHING 
+      else. 
+      
+      coolingValve.openValveByAmount(0.3);    // is too damn long.
+      
+03a.  B. The default constructor.
+  b.  B. The default constructor.
+  c.  Its a dereference operator. new returns a pointer to the memory
+      allocated, and the * dereferences the memory, so presumably the 
+      assignment operator requires it to compile. However, there's 
+      nothing in the memory because new only allocates memory, it doesnt 
+      initialize.
+  d.  C. The copy constructor, once, and the assignment operator, once...
+  e.  C. There is a dangling pointer
+      
+      BTW:  This question is evil.
+
+04a.  B. Only x's target.
+  b.  C. A dangling pointer
+  c.  C. It exists and is unchanged, but is inaccessible...
+      
+05.  Step only jumps past the next semi-colon, to the very next line of code
+     Its for tracking very specifically what is going on in your code.  Next 
+     jumps to the next loop iteration, function call, or break point.  It is
+     more for watching the overall flow of the program and getting to 
+     particular segments of program execution in a relatively short amount of 
+     time.
+
+
+06.  basic_string<long> request(xandify("Tickle me"));
+      
+      
+07.  D. Same as x[3][7][0]
+      
+      
+08. 
+    Start()
+    Stack:O(1)
+    Queue:O(1)
+    Deque:0(1)
+    Hash: O(nLogn)
+    BST   O(nLogn)
+
+    operator bool()
+    O(1)
+    
+    operator++ ()
+    O(1)
+    Except Hash: O(log n)
+
+    
+    operator* ()
+    O(1)
+      
+      
+09.   
+
+using namespace std;
+      
+ostream& HashTable::print(ostream& stream)
+{
+  for (vector<List<Student> >::iterator i = buckets.begin(); 
+       i != buckets.end(); ++i)
+     {
+        for (List<Student>::ostream_iterator j(stream, ' ') = i->begin();
+             j != i->end(); ++j);
+
+     }
+     
+     return stream;
+}
+      
+      
+      
+10.    
+using namespace std;
+
+class HashTable::Iterator
+{      
+   iterator(HashTable& target)
+    :student(target.buckets->head())
+   {
+   
+   }
+
+   operator bool()
+   {
+   return 
+   }
+    
+   Iterator& operator++ ()
+   {
+   while (buckets != NULL)
+   {  
+      for (Student* s = student ; s->next() != NULL; s->next())
+         {
+            if(*s > *student)
+	    {
+	       student = s;
+	       return student;
+	    }
+         } 
+      }
+      ++bucket;
+   }
+    
+   Student* operator* ()
+   {
+   return student;
+   }
+
+}
+{
+  for (vector<List<Student> >::iterator i = buckets.begin(); 
+       i != buckets.end(); ++i)
+     {
+        for (List<Student>::ostream_iterator j(stream, ' ') = i->begin();
+             j != i->end(); ++j);
+
+     }
+     
+     return stream;
+}
+      
+      
+11.   Insertion is pretty fast near the beginning and end of the 
+      list. Insertion in the middle of the list is probably no better than an 
+      array.  It is ill suited for searching or for storing sorted data.  
+
+
+
+12a.  C. O(N^2)
+b.    length should be a private data member that is incremented and 
+      decremented with insertion and deletion respectively, and the length()
+      function should return the value in O(1) time.  If there is some 
+      objection to this, then the destructor could at least call length()
+      only once, store the value, and decrement it to zero as it deletes.
+      Either change would reduce running time for the destructor to O(N).
+      It would not reduce the big-Oh running time, but moving the oldHead 
+      declaration out of the while loop would eliminate calling Node* 
+      constructor and destructors from each iteration, leaving just an
+      assignment operator in its place.
+
+13. 
+
+         15
+        /  \
+      10    35
+           /  \ 
+         25    40
+        /  \
+      20    30
+
+
+14. Balancing occurs when the maximum length path from root to a leaf is 
+    2 or more longer than the minimum length path from root to a leaf.
+    If the tree is perfectly balanced, that is every path from root to a
+    leaf is equal (recalling a tree with one node has height 0, a perfectly 
+    balanced tree of height h has 2^(h+1) - 1 nodes).  An AVL tree can grow 
+    when a node is added while it is perfectly balanced, as no matter which 
+    leaf the new node hangs from, the height increases by 1, but the tree 
+    still satisfies the condition for balance.
+
+
+15. 
+
+using namespace std;
+
+Node* Tree::upper_bound(const string& k)
+{
+   return root->getUpper(k, NULL);
+}
+
+Node* Node::getUpper(const string& compare, Node*& tempUppper)
+{
+   if (key > compare) 
+   {   
+      if (left == NULL)
+         return this;
+      else 
+         return left->getUpper(compare, this);
+   }
+   
+   else if (key < compare)
+   {
+      if (right == NULL)
+         return NULL;
+      else   
+         return right->getUpper(compare, tempUpper);
+   }
+   
+   else  // (key == compare)
+   {
+      if (left == NULL)
+         return tempUpper;
+      else
+         return left->getUpper(compare,tempUpper);
+   } 
+
+}
+
+16.   A. Set

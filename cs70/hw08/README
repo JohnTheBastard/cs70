@@ -1,0 +1,242 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 8
+Date:	        4 March, 2004
+
+
+--------------------
+ Purpose of Program 
+--------------------
+
+  This program implements a discrete event simulation of a bar where customers
+arrive at random time and they are served. The simulation is intended to 
+determine if a single worker at the bar can serve the current customer 
+population in a reasonable amount of time. To this end, the simulation tracks
+various statistics about waiting time and number of drinks served.
+
+------------
+ I/O Format 
+------------
+
+INPUT: 
+%>./assign_08 [options]
+
+See assign_08.cc file for option flag documentation.
+
+
+OUTPUT: 
+The simulation outputs the times at which servers and drinkers begin being 
+served at the bar, their scheduled start time, and the time it takes to serve
+them. At the end of the run, various statistics are output about the run. 
+This includes number of drinks served, average wait time for a bar request
+to be filled, and the total number of drinks served. 
+
+Sample output:
+
+Starting drinker scheduled for 2:03 at 2:03
+drinker scheduled for 2:03 serviced in 14
+Starting server scheduled for 4:04 with 3 drink(s) at 4:04
+server scheduled for 4:04 serviced in 59
+...
+Starting server scheduled for 1:00:38 with 6 drink(s) at 1:00:38
+server scheduled for 1:00:38 serviced in 4:07
+Starting drinker scheduled for 1:29:25 at 1:29:25
+drinker scheduled for 1:29:25 serviced in 30
+Drinker statistics:
+        4 customers served
+        mean time 7:20
+        standard deviation 13:51
+        minimum time 14
+        maximum time 28:06
+Table server statistics:
+        11 servers sold 57 drinks
+        mean time 6:21
+        standard deviation 3:14
+        minimum time 59
+        maximum time 10:33
+
+
+
+-------------------
+ General Structure 
+-------------------
+
+This program is contained within 12 files. The following files were provided:
+
+assign_08.cc            actually runs the simulation using the classes present
+barrequester.*	        class representing people served at the bar
+mtwist.*	        a fast number generation package
+randistrs.*	        generates random numbers from various distributions
+simulationconstants.hh
+simulationtime.*        manages the time factor of the simulation
+
+We added the barMonkey() function to assign_08.cc and provided the files 
+list.hh and list.icc which comprise the templated linked list used by the 
+simulation.  The functions we wrote are described below.
+
+METHODS:
+
+We implemented the following public methods:
+
+List<OBJECT>::List()
+
+  Default constructor.
+	
+
+List<OBJECT>::List(const List<OBJECT>& source)
+
+  Copy constructor.
+
+
+List<OBJECT>::~List()
+
+  Destructor.
+
+
+List<OBJECT>& List<OBJECT>::operator= (const List<OBJECT>& source)
+
+  Assignment operator - deletes all data currently stored in the
+list. Then all values from the source list are pushed on to this list
+and it is returned.
+
+
+OBJECT List<OBJECT>::popHead()
+
+  Removes and returns the first value from the list and deletes the
+node storing it. The next node is now marked as the head. If no data is in the
+list, an error message is printed.
+
+
+OBJECT List<OBJECT>::peekHead()
+
+  Returns the value on the head node of the list without actually removing it
+from the list.
+
+void List<OBJECT>::pushHead(OBJECT value)
+
+  Pushes the given object on to the head of the list.
+
+void List<OBJECT>::pushTail(OBJECT value)
+
+  A new node storing value is created and placed on the tail of the
+list. The tail pointer is modified accordingly.
+
+
+int List<OBJECT>::length() const
+
+  Returns the length of the list in O(1) time.
+
+
+List<OBJECT>::Node::Node()
+
+  Default Node constructor.
+
+
+List<OBJECT>::Node::~Node()
+
+  Node destructor.
+
+
+ListIterator<OBJECT>::ListIterator(const List<OBJECT>& source)
+
+  ListIterator constructor - the List over which to iterate is specified.
+
+
+ListIterator<OBJECT>::ListIterator(const ListIterator<OBJECT>& source)
+
+  ListIterator copy constructor.				      
+
+
+ListIterator<OBJECT>::~ListIterator()
+
+  ListIterator destructor.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>
+::operator= (const ListIterator<OBJECT>& source)
+
+  ListIterator assignment operator.
+
+
+ListIterator<OBJECT>::operator bool() const
+
+  Returns true if there are remaining elements in the List to
+iterate over. False otherwise.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>::operator++ ()
+
+  Pre-increment operator - Moves to the next element in the 
+List if there is one. Prints an error if there are no more
+remaining elements to iterate over.
+
+
+OBJECT& ListIterator<OBJECT>::operator* ()
+
+  Returns the value stored in the node of the current position. This
+value may be modified without invalidating the iterator.
+
+static void assign_08
+::barMonkey(List<Drinker>& drinkerQueue, List<TableServer>& serverQueue)
+
+  This function is the main simulation component of the program. Given a pair
+of queues (one for the drinkers and one for the servers), this function 
+simulates bar service by advancing the current time and serving customers
+as they arrive at the bar, giving preference to servers over ordinary drinkers.
+The simulation continues to run until both queues of requesters are empty and
+nobody is currently being served. 
+
+  
+DATA STRUCTURES:
+
+List
+
+  Templated linked list of Nodes, which store OBJECTs. Stores only pointers to
+the head and tail of the list and the length of the list. The only requirement
+for the OBJECT given to the list is that it has an implementation of the
+assignment operator.
+
+
+Node
+
+  Element of a templated linked list of OBJECTs. Contains the data stored and a
+pointer to the next Node in the list.
+
+
+ListIterator
+
+  Iterates over a List. It stores a pointer to the current element
+and can return its value (allowing the user to modify the data).
+
+
+ALGORITHMS:
+
+  The only "algorithm" that we implemented was the code for the simulation
+in the barMonkey function. The function is described above, but it basically
+implements the discrete-event simulation. The methodology for the function was
+provided as pseudo-code by Professor Kuenning.
+  Other algorithms are used in this program (generating random numbers, etc.) 
+but all of this code was provided. For details, see comments in the respective
+files.
+
+---------------------------------------
+ Limitations and Possible Improvements 
+---------------------------------------
+
+  The iterator class currently does not have a reset function to start
+the iterator again at the beginning of the list. It also does not have
+a post-increment operator. No other operators are included, but there
+is no clear use for them.
+  We currently use a system of six boolean variables to track the commonly
+used conditional statements made in the barMonkey function. We think this 
+method makes the code more readable. There may be other ways to improve on
+this method, but we couldn't think of any. Some people don't agree with this
+design choice because changing the existing code can be rather complicated and
+requires awareness of the situations in which booleans need to be reevaluated.
+  Additionally, in the barRequester function, it is possible in some cases to 
+advance the time by more than one second. We currently do not check for these
+situations, as it would make the loop even more complicated. Doing so could
+lead to improved performance, but our simulations were not large enough for
+this to become an issue.
+  In our templated list class we currently do not implement popTail or isEmpty
+because we had no use for them in this assignment.

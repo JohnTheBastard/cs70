@@ -1,0 +1,46 @@
+/*
+ * File:     chunkyString.hh
+ * Authors:  John Hearn and Russ Osborn
+ * Date:     9 April, 2004
+ * Course:   CS70, Spring 2004
+ * Assignment #9
+ *
+ * This file defines the interface to the ChunkyString class which is a linked list
+ * of chunks, each storing a portion of a string. Included is the header for the
+ * ChunkyStringIterator class.
+ *
+ * The ChunkyString class stores a single larger string inside a linked list of 
+ * chunks, each of which contain an array of characters. The ChunkyString class 
+ * acts as if it were a regular string, supporting a copy constructor, assignment
+ * operator, concatenation of single characters, etc.
+ *
+ */
+
+#ifndef CHUNKYSTRING_HH
+#define CHUNKYSTRING_HH
+
+class ChunkyString
+{
+  friend class ChunkyStringIterator;
+
+public:
+
+  ChunkyString();
+  ChunkyString(const ChunkyString& source);
+  ~ChunkyString();
+
+  ChunkyString& operator= (const ChunkyString& source);
+  ChunkyString& operator+ (const char addition);
+  
+  int length();
+  void print(ostream& stream);
+
+private:
+
+  int len;
+
+  List<Chunk> chunkList;
+
+};
+
+

@@ -1,0 +1,93 @@
+/*
+ * File:    intlist.hh
+ * Authors: John Hearn and Russ Osborn
+ * Date:    26 March, 2004
+ * Course:  CS70, Spring 2004
+ * Assignment #7
+ *
+ * This file defines the interface to the IntList class - a linked list of
+ * integers. Included is the headers for the IntListIterator class,and the
+ * Node class (a subclass of the IntList class).
+ *
+ * The IntList class itself stores only pointers to the head and tail node of
+ * the list. The Node class stores an integer value and a pointer to the next
+ * node in the list. This implementation performs pushTail() and length() in
+ * O(1) time.
+ *
+ */
+
+
+#ifndef INTLIST_HH
+#define INTLIST_HH
+
+class IntList;
+class IntListIterator;
+
+class IntList 
+{
+  friend class IntListIterator;
+
+public:
+  
+  IntList();                                 // Default Constructor
+  IntList(const IntList& source);            // Copy Constructor
+  ~IntList();				     // Destructor
+
+  IntList& operator= (const IntList& source); // Assignment operator
+  
+  int popHead();			     // return head
+  void pushTail(int value);		     // push value onto list in O(1).
+  int length() const;			     // return list length in O(1).
+
+private:
+  
+  int len;
+
+  class Node				     // Node subclass of the linked
+					     // list class... stores actual
+					     // data.
+  {
+  public:
+    int data;				     // Stored value
+    Node* next;				     // Pointer to next element
+    
+    Node();				     // Default Constructor
+    ~Node();				     // Destructor
+    
+  };
+  
+  Node* head;
+  Node* tail;
+  
+};
+
+class IntListIterator			     // Iterator class declarations
+{
+public:
+
+  IntListIterator(const IntList& source);    // Create an iterator for the
+					     // give source IntList.
+  IntListIterator(const IntListIterator& source);
+					     // Copy constructor
+  ~IntListIterator();
+  
+  IntListIterator& operator= (const IntListIterator& source);
+  
+  operator bool() const;		     // Returns true if the iterator
+					     // is still valid (more elements
+					     // in the list)
+  
+  IntListIterator& operator++ ();	     // Iterates to the next element
+					     // in the list.
+  
+  int& operator* ();			     // Returns the value stored
+					     // at this point in the list
+					     // so that it may be examined
+					     // or modified.
+  
+private:
+
+  IntList::Node* target;		     // Current position in the list.
+  
+};
+#endif

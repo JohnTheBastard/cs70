@@ -1,0 +1,30 @@
+/*
+ *
+ * A simple program for Calculating industrial grade primes.
+ * John Hearn
+ * Mar 22, 2004
+ * Discrete HW#6 Problem 6
+ *
+ */
+
+#include <iostream>
+#include <stdexcept>
+
+using namespace	std;
+
+int main()
+{
+  // We want to find numbers p of the form 2^p mod p = 2.
+  // For our purposes, we are only looking for 561 < p < 1000.
+  
+  int p = 563;
+  int x = 8;
+  
+  while (p < 1000)
+    {
+      p += 2;
+      x = (4*x)%(p);
+      if (x == 2) cout << p << endl;
+    }
+  return 1;
+}

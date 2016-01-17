@@ -1,0 +1,306 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 3/4
+Date:		16 February, 2004
+
+
+Purpose of Program
+------------------
+
+This program maintains a database of students and courses with information 
+about student name, schedule, and hair color, and course meeting times, 
+department, number, roster, and maximum enrollment.
+
+I/O Format
+----------
+
+Input:
+
+Input can be piped in from a file at execution or can be manually input during
+program execution. A command menu specifies the input options as follows:
+
+  	quit		Terminate the program.                                
+  	help		Print a simple help message.                          
+  	student		Add a new student, prompting for name and hair color. 
+  	course		Add a new course, prompting for department, course    
+  			number, meeting time, and maximum enrollment.         
+  	enroll		Enroll a student in a course, prompting for the       
+  			student's name, the department, and the course number.
+  	drop		Drop a student from a course, prompting as for        
+  			"enroll".                                             
+  	hair		Change a student's hair color, prompting for the name 
+  			and the new color.                                    
+  	time		Change a course's meeting time, prompting for the     
+  			new information.                                      
+  	show students	Display all students, including the names of the      
+  			courses in which they are currently enrolled..        
+  	show courses	Display all courses, including the names of students  
+  			currently enrolled in each.         
+
+Once a menu option is selected, the user is prompted for additional input (e.g. 
+student name and hair color).
+
+Output:
+
+Other than user prompts, the program outputs student information in the 
+following form:
+
+Last Name, First Name, Hair Color
+	Number of Courses: Department/Course Number
+
+Course information is output in the following form:
+
+Department/Course Number meets Meeting Time
+	Roster:
+	Last Name, First Name
+	...
+
+General Structure
+-----------------
+
+The class is contained within seven files. 
+
+assign_03.cc
+
+This provides the user with a simple interface for the registrar database. 
+It takes user commands as input and allows creation and modification of courses
+and students.
+
+registrar.cc
+
+Provides the implementations for the members of the registrar class. This 
+includes tracking, modification, and addition of students and classes. This
+class also handles changes in class enrollment.
+
+registrar.hh
+
+Header file for registrar class. Contains declarations of the registrar member
+functions and data members.
+
+student.cc
+
+This file implements the members of the student class. The class represents
+a single college student. It stores the student's name, schedule, and hair
+color. It supports addition and removal of courses from the schedule as well.
+Finally, it provides a function for output of the student's information.
+
+student.hh
+
+Header file for student class. Contains declarations for student functions
+and data members.
+
+course.cc
+
+This file implements the members of the course class. The class represents a 
+single course at the college. It stores the course's department, number, 
+meeting time, maximum enrollment, and current roster. It also provides a method
+for outputting the course information.
+
+course.hh
+
+Header file for the course class. Contains declarations for course functions
+and data members.
+
+METHODS
+
+File: assign_03.cc
+
+(taken from assign_03.cc written by Geoff Kuenning)
+
+int main
+	Main driver program
+
+static void interact
+	Interactive interface to DB
+
+static void printCommandList
+	Print all legal commands
+
+static string promptRead
+	Prompt user and get a string
+
+static void doAddStudent
+	Do the add-student command
+
+static void doAddCourse
+	Do the add-course command
+
+static void doEnroll
+	Do the enroll-in-course command
+
+static void doDrop
+	Do the drop-course command
+
+static void doHairChange
+	Do the change-hair-color command
+
+static void doTimeChange
+	Do the change-meeting-time command
+
+static void doShowStudents
+	Do the show-students command
+
+static void doShowCourses
+	Do the show-courses command
+
+static Student*	getStudentByName
+	Find a student by asking for name
+
+static Course* getCourseByName
+        Find a course by asking for name
+
+
+File: registrar.cc
+
+(taken from registrar.cc written by Geoff Kuenning)
+
+Registrar_DB::Registrar_DB
+	Default Constructor
+
+Registrar_DB::~Registrar_DB
+	Destructor
+                      
+bool Registrar_DB::canAcceptStudents
+	True if room for more students   
+
+bool Registrar_DB::canAcceptCourses
+	True if room for more courses    
+
+bool Registrar_DB::newStudent
+	Add a new student to DB          
+
+bool Registrar_DB::newCourse
+	Add a new course to DB           
+
+Student* Registrar_DB::findStudentByName
+	Given a student name, find him/her
+
+Course*	Registrar_DB::findCourseByName
+	Given a course name, find it     
+
+ostream& Registrar_DB::showStudents
+	Display all students             
+
+ostream& Registrar_DB::showCourses
+	Display all courses              
+ 
+
+File: student.cc
+
+(taken from student.cc originally written by Geoff Kuenning)
+
+Student::Student
+	Default Constructor
+
+Student::~Student
+	Destructor
+
+void Student::fillInInfo
+	Fill in student info               
+
+string Student::name
+	Return student's full name         
+
+bool Student::hasMaximumLoad
+	True if can't add any more courses 
+
+void Student::changeHairColor
+	Dye student's hair                 
+
+bool Student::addCourseToSchedule
+	Insert course in schedule. Also adds student to course if needed. 
+Returns true if course was added, false otherwise (e.g., if course was already
+there, or no room).
+
+bool Student::removeCourseFromSchedule
+	Remove course from schedule also removes student from course if needed.
+Returns true if course was removed, false otherwise (e.g., if course wasn't in
+schedule).
+              
+ostream& Student::print
+	Produce representation of student  
+
+void Student::dropAllCourses
+	Remove student from all enrollment 
+
+
+course.cc
+
+(taken from course.cc originally written by Geoff Kuenning)
+
+
+Course::Course
+	Default constructor and constructor with parameters
+
+Course::~Course
+
+void Course::fillInInfo
+	Set or change course info          
+
+bool Course::isFull
+	Return true if course is at maximum enrollment.
+               
+bool Course::courseIs
+	Return true if course department and number match parameters      
+
+bool Course::addStudent
+	Add a student to the course. Returns true if add was successful, false
+if not done (e.g., student was already in the course).
+
+void Course::removeStudent
+	Remove a student from the course. Returns true if the remove was 
+successful, false otherwise (e.g. student wasn't in the course).
+
+void Course::changeMeetingTime
+	Reschedule course                  
+
+ostream& Course::showName
+	Display course name on a stream    
+
+ostream& Course::print
+	Display all course info on a stream
+
+void Course::kickOutStudents
+	De-enroll all students              
+
+
+DATA STRUCTURES:
+
+There are three data structures to note in this program:  Student, Course, and 
+Registrar_DB.  Student has private member elements courseCount, fullName, 
+hairColor, and MAX_COURSES_PER_STUDENT.  Course has private member elements 
+departmentName, departmentCourseNum, numStudentsEnrolled, meetingTime, 
+maxEnrollment, and roster.  Registrar_DB has private data members students, 
+courses, maxStudents, maxCourses, numStudents, and numCourses.
+
+
+Algorithms:
+
+There are no advanced algorithms used in this program.  The most complex 
+routine used is in course roster, which is maintained in alphabetical order. 
+Insertion is done by shifting each element of the already alphabetized array,
+starting from the last non-null element, down one until the appropriate space 
+for the name for insertion is available.  The name is inserted into the array.
+Deletion is performed by shifting every element following the name for deletion
+up one in the array.
+
+The course schedule array for a student is even more straight forward. A 
+course is removed from the student's schedule by setting the pointer to that 
+course to null.  Adding a course is accomplished by looking for a null pointer
+in the array and setting it to the desired course, with error checking to 
+ensure the student is not doubly enrolled in a course.
+
+
+Limitations and Possible Improvements
+-------------------------------------
+
+At this time there are no known bugs in the program, but there are some 
+limitations and possible improvements.  The database is limited to 128 students
+and 20 courses.  This limitation was specified as a deliberate restriction on
+the database.  What we consider the biggest weakness of the program is the lack
+of permanent data storage.  There is currently no functionality for storing 
+data to a file.  All data must be reentered upon execution.  Other than this
+substantial inconvenience, the next most important feature might be storing 
+more data about the students and courses, such as student ID numbers, age, 
+major, etc., or course location and prerequisites.
+

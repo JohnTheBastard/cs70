@@ -1,0 +1,191 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 8
+Date:	        4 March, 2004
+
+
+--------------------
+ Purpose of Program 
+--------------------
+
+
+------------
+ I/O Format 
+------------
+
+INPUT: 
+%>./assign_08 [options]
+
+See assign_08.cc file for option flag documentation.
+
+
+OUTPUT:
+
+
+-------------------
+ General Structure 
+-------------------
+
+This program is contained within 12 files. The following files were provided:
+
+assign_08.cc
+barrequester.*
+mtwist.*	        a fast number generation package
+randistrs.*	        generates random numbers from various distributions
+simulationconstants.hh
+simulationtime.*
+
+We added the barMonkey() function to assign_08.cc and provided the files 
+list.hh and list.icc which comprise the templated linked list used by the 
+simulation.  The functions we wrote are described below.
+
+METHODS:
+
+We implemented the following public methods:
+
+List<OBJECT>::List()
+
+  Default constructor.
+	
+
+List<OBJECT>::List(const List<OBJECT>& source)
+
+  Copy constructor.
+
+
+List<OBJECT>::~List()
+
+  Destructor.
+
+
+List<OBJECT>& List<OBJECT>::operator= (const List<OBJECT>& source)
+
+  Assignment operator - deletes all data currently stored in the
+list. Then all values from the source list are pushed on to this list
+and it is returned.
+
+
+OBJECT List<OBJECT>::popHead()
+
+  Removes and returns the first value from the list and deletes the
+node storing it. The next node is now marked as the head. If no data is in the
+list, an error message is printed.
+
+
+OBJECT List<OBJECT>::peekHead()
+
+************************
+*****ADD STUFF HERE*****
+************************
+
+
+void List<OBJECT>::pushHead(OBJECT value)
+
+************************
+*****ADD STUFF HERE*****
+************************
+
+
+void List<OBJECT>::pushTail(OBJECT value)
+
+  A new node storing value is created and placed on the tail of the
+list. The tail pointer is modified accordingly.
+
+
+int List<OBJECT>::length() const
+
+  Returns the length of the list in O(1) time.
+
+
+List<OBJECT>::Node::Node()
+
+  Default Node constructor.
+
+
+List<OBJECT>::Node::~Node()
+
+  Node destructor.
+
+
+ListIterator<OBJECT>::ListIterator(const List<OBJECT>& source)
+
+  ListIterator constructor - the List over which to iterate is specified.
+
+
+ListIterator<OBJECT>::ListIterator(const ListIterator<OBJECT>& source)
+
+  ListIterator copy constructor.				      
+
+
+ListIterator<OBJECT>::~ListIterator()
+
+  ListIterator destructor.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>
+::operator= (const ListIterator<OBJECT>& source)
+
+  ListIterator assignment operator.
+
+
+ListIterator<OBJECT>::operator bool() const
+
+  Returns true if there are remaining elements in the List to
+iterate over. False otherwise.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>::operator++ ()
+
+  Pre-increment operator - Moves to the next element in the 
+List if there is one. Prints an error if there are no more
+remaining elements to iterate over.
+
+
+OBJECT& ListIterator<OBJECT>::operator* ()
+
+  Returns the value stored in the node of the current position. This
+value may be modified without invalidating the iterator.
+
+static void assign_08
+::barMonkey(List<Drinker>& drinkerQueue, List<TableServer>& serverQueue)
+
+************************
+*****ADD STUFF HERE*****
+************************
+
+  
+DATA STRUCTURES:
+
+List
+
+  Linked list of Nodes, which store OBJECTs. Stores only pointers to
+the head and tail of the list and the length of the list.
+
+
+Node
+
+  Element of a linked list of OBJECTs. Contains the data stored and a
+pointer to the next Node in the list.
+
+
+ListIterator
+
+  Iterates over a List. It stores a pointer to the current element
+and can return its value (allowing the user to modify the data).
+
+
+ALGORITHMS:
+
+
+---------------------------------------
+ Limitations and Possible Improvements 
+---------------------------------------
+
+... Also, the current implementation lacks ... popTail, isEmpty...
+
+
+  The iterator class currently does not have a reset function to start
+the iterator again at the beginning of the list. It also does not have
+a post-increment operator. No other operators are included, but there
+is no clear use for them.
+

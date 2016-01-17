@@ -1,0 +1,547 @@
+ /****************************************************************************\
+  * File:  student.hh
+  * Modified by: Russ Osborn, John Hearn
+  * Date: 11 February, 2004
+  * Original Author: Geoff Kuenning
+  * Course: CS 70, Spring 2004
+  * Assignment #3 
+  *
+  * This file contains the main program for the assignment.  This
+  * program provides an interactive interface to a college registrar
+  * database.
+  *
+  * The interactive interface is fairly stupid.  Commands are read as
+  * strings of nonblank characters, using the built-in I/O functions.
+  * If a command takes parameters, the user is prompted for them one by
+  * one; each parameter is expressed as either a nonblank string or an
+  * integer.  Error-checking is minimal.
+  *
+  * Supported commands:
+  *
+  *	quit		Terminate the program.
+  *	help		Print a simple help message.
+  *	student		Add a new student, prompting for name and hair color.
+  *	course		Add a new course, prompting for department, course
+  *			number, meeting time, and maximum enrollment.
+  *	enroll		Enroll a student in a course, prompting for the
+  *			student's name, the department, and the course number.
+  *	drop		Drop a student from a course, prompting as for
+  *			"enroll".
+  *	hair		Change a student's hair color, prompting for the name
+  *			and the new color.
+  *	time		Change a course's meeting time, prompting for the
+  *			new information.
+  *	show students	Display all students, including the names of the
+  *			courses in which they are currently enrolled..
+  *	show courses	Display all courses, including the names of students
+  *			currently enrolled in each.
+ \************************************************************************** */
+
+#include "course.hh"
+#include "registrar.hh"
+#include "student.hh"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+/*
+ * Table of contents and forward declarations
+ */
+int			main(int argc, char* argv[]);
+					// Main driver program
+static void		interact(Registrar_DB* db);
+					// Interactive interface to DB
+static void		printCommandList(ostream& stream);
+					// Print all legal commands
+static string		promptRead(const string& prompt, ostream& promptStream,
+			  istream& stream);
+					// Prompt user and get a string
+static void		doAddStudent(Registrar_DB* db);
+					// Do the add-student command
+static void		doAddCourse(Registrar_DB* db);
+					// Do the add-course command
+static void		doEnroll(Registrar_DB* db);
+					// Do the enroll-in-course command
+static void		doDrop(Registrar_DB* db);
+					// Do the drop-course command
+static void		doHairChange(Registrar_DB* db);
+					// Do the change-hair-color command
+static void		doTimeChange(Registrar_DB* db);
+					// Do the change-meeting-time command
+static void		doShowStudents(Registrar_DB* db);
+					// Do the show-students command
+static void		doShowCourses(Registrar_DB* db);
+					// Do the show-courses command
+static Student*		getStudentByName(Registrar_DB* db);
+					// Find a student by asking for name
+static Course*		getCourseByName(Registrar_DB* db);
+					// Find a course by asking for name
+
+/*
+ * Parameters of the implementation
+ */
+const int		MAX_STUDENTS = 128;
+					// Limit on students enrolled in school
+const int		MAX_COURSES = 20;
+					// Limit on number of courses offered
+
+/*
+ * Driver program for the interactive registrar database.  This
+ * program simply creates a new registrar's database and then calls a
+ * subroutine to perform the actual interactive creation and update of
+ * the database.
+ */
+int main(
+    int			,		// Argument count (unused)
+    char*[]		)		// Argument vector (unused)
+    {
+    /*
+     * Create the database.
+     */
+    Registrar_DB DGP_roster(MAX_STUDENTS, MAX_COURSES);
+
+    /*
+     * Let somebody else do the hard work.
+     */
+    interact(&DGP_roster);
+    return 0;
+    }
+
+/*
+ * Interactive interface to a registrar's database.  The user is
+ * repeatedly prompted for a command.  The command is then decoded and
+ * dispatched to an appropriate routine for execution.
+ */
+void interact(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    string		command;	// Command currently being executed
+
+    /*
+     * Before beginning, print a command list so the user has an idea of
+     * how this program works.
+     */
+    printCommandList(cerr);
+
+    /*
+     * Main loop. We repeatedly get a command from cin; if EOF is
+     * encountered we will exit the loop.
+     *
+     * If a command was returned, the body of the loop will classify
+     * and execute it.
+     */
+    while (1)
+	{
+	/*
+	 * Get a command from the user.  If EOF is hit, leave the loop.
+	 */
+	command = promptRead("\nYour command? ", cerr, cin);
+	if (!cin)
+	    break;
+
+	/*
+	 * Figure out what command was entered, and perform it.
+	 */
+	if (command == "quit")
+	    return;
+
+	else if (command == "help"  ||  command == "?")
+	    printCommandList(cerr);
+
+	else if (command == "student")
+	    doAddStudent(db);
+
+	else if (command == "course")
+	    doAddCourse(db);
+
+	else if (command == "enroll")
+	    doEnroll(db);
+
+	else if (command == "drop")
+	    doDrop(db);
+
+	else if (command == "hair")
+	    doHairChange(db);
+
+	else if (command == "time")
+	    doTimeChange(db);
+
+	else if (command == "show")
+	    {
+	    /*
+	     * The show command takes a parameter telling what to
+	     * show.  One can argue that the following code belongs in
+	     * a "doShow" routine.
+	     */
+	    string showWhat;
+	    if (!(cin >> showWhat))
+		return;			// EOF, give up
+
+	    if (showWhat == "students")
+		doShowStudents(db);
+
+	    else if (showWhat == "courses")
+		doShowCourses(db);
+
+	    else
+		cerr << "Unrecognized argument to 'show' command: '"
+		  << showWhat << "'\n";
+	    }
+
+	else
+	    cerr << "Unrecognized command '" << command << "'.  Try again.\n";
+	}
+    }
+
+/*
+ * Print a list of all commands in the interactive interface.
+ */
+void printCommandList(
+    ostream&		stream)		// Stream to print to
+    {
+    stream << '\n';
+    stream << "Commands are:\n";
+    stream << "  quit: terminate program\n";
+    stream << "  help: print this message\n";
+    stream << "  student: add new student\n";
+    stream << "  course: add new course\n";
+    stream << "  enroll: enroll student in course\n";
+    stream << "  drop: drop student from course\n";
+    stream << "  hair: change student's hair color\n";
+    stream << "  time: change course's meeting time\n";
+    stream << "  show students: display all students\n";
+    stream << "  show courses: display all courses\n";
+    }
+
+/*
+ * Ask the user for a string (using a caller-supplied prompt), read
+ * it, and return it.  The hard work is done by the cin functions.
+ */
+string promptRead(
+    const string&	prompt,		// String to prompt with
+    ostream&		promptStream,	// Stream to prompt to
+    istream&		stream)		// Stream to read answer from
+    {
+    promptStream << prompt << flush;
+    string response;
+    stream >> response;
+    return response;
+    }
+
+/*
+ * Perform the add-student command.  After error-checking, we prompt
+ * for the student's parameters and then insert him/her in the
+ * database using functions of Registrar_DB.
+ */
+void doAddStudent(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    /*
+     * Make sure there's room.
+     */
+    if (!db->canAcceptStudents())
+	{
+	cerr << "Student roster already full." << endl;
+	return;
+	}
+
+    /*
+     * Get student parameters.  Be careful to check for EOF at each step.
+     */
+    const string firstName = promptRead("First name? ", cerr, cin);
+    if (!cin)
+	return;
+
+    const string lastName = promptRead("Last name? ", cerr, cin);
+    if (!cin)
+	return;
+
+    const string hairColor = promptRead("Hair color? ", cerr, cin);
+    if (!cin)
+	return;
+
+    /*
+     * We have all the information we need.  Use the database's
+     * functions to insert the student.
+     */
+    if (!db->newStudent(firstName, lastName, hairColor))
+	{
+	cerr << "Student " << lastName << ", " << firstName
+	  << " is already in the database\n";
+	return;
+	}
+    }
+
+/*
+ * Perform the add-course command.  After error-checking, we prompt
+ * for the course's parameters and then insert it in the
+ * database using functions of Registrar_DB.
+ */
+void doAddCourse(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    if (!db->canAcceptCourses())
+	{
+	cerr << "Course list is already full." << endl;
+	return;
+	}
+
+    /*
+     * Get all parameters from the user.
+     */
+    string department = promptRead("Department? ", cerr, cin);
+    if (!cin)
+	return;
+
+    cerr << "Course number? " << flush;
+    int courseNumber;
+    if (!(cin >> courseNumber))
+	return;
+
+    string meetingDays = promptRead("Meeting days? ", cerr, cin);
+    if (!cin)
+	return;
+
+    string meetingHour = promptRead("Meeting time? ", cerr, cin);
+    if (!cin)
+	return;
+
+    cerr << "Maximum enrollment? " << flush;
+    int maxEnrollment;
+    if (!(cin >> maxEnrollment))
+	return;
+
+    /*
+     * We now have everything needed by the registrar database.  Add
+     * the course.
+     */
+    if (!db->newCourse(department, courseNumber,
+      meetingDays + " " + meetingHour, maxEnrollment))
+	{
+	cerr << "Course " << department << courseNumber
+	  << " is already in the database\n";
+	return;
+	}
+    }
+
+/*
+ * Perform the enroll-in-course command.  We prompt for the student's
+ * name and course information, and then use functions of Registrar_DB
+ * to perform the enrollment.
+ */
+void doEnroll(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    /*
+     * Prompt for the student and find him/her.
+     */
+    Student* student = getStudentByName(db);
+    if (student == NULL)
+	return;				// Not found, error already printed
+
+    /*
+     * If the student would be overloaded, give up now.
+     */
+    if (student->hasMaximumLoad())
+	{
+	cerr << "Student " << student->name()
+	  << " is at maximum load, can't add another course\n";
+	return;
+	}
+
+    /*
+     * Prompt for the course and find it.
+     */
+    Course* course = getCourseByName(db);
+    if (course == NULL)
+	return;				// Not found, error already printed
+
+    /*
+     * If the course is oversubscribed, give up now.
+     */
+    if (course->isFull())
+	{
+	cerr << "Course ";
+	course->showName(cerr);
+	cerr << " is full, can't add another student\n";
+	return;
+	}
+
+    /*
+     * Add the course to the student's schedule; as a side effect,
+     * also insert him/her in the course's roster.
+     *
+     * The way the classes are written in the sample solution, we
+     * could call either student->addCourseToSchedule or
+     * course->addStudent with the same effect.  The choice is
+     * arbitrary.
+     */
+    if (!student->addCourseToSchedule(course))
+	cerr << "Student " << student->name() << " was already in course\n";
+    }
+
+/*
+ * Perform the drop-from-course command.  This is almost identical to
+ * doEnroll (above), except we can omit some error checking.
+ */
+void doDrop(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    /*
+     * Prompt for the student and find him/her.
+     */
+    Student* student = getStudentByName(db);
+    if (student == NULL)
+	return;				// Not found, error already printed
+
+    /*
+     * Prompt for the course info and find the course.
+     */
+    Course* course = getCourseByName(db);
+    if (course == NULL)
+	return;				// Not found, error already printed
+
+    /*
+     * Deenroll the student by removing the course from his/her
+     * schedule; as a side effect, also remove him/her from the
+     * course's roster.
+     *
+     * If the student wasn't in the course, produce an error message.
+     *
+     * The way the classes are written in the sample solution, we
+     * could call either student->removeCourseFromSchedule or
+     * course->removeStudent with the same effect.  The choice is
+     * arbitrary.
+     */
+    if (!student->removeCourseFromSchedule(course))
+	cerr << "Student " << student->name() << " was not in course\n";
+    }
+
+/*
+ * Perform the change-hair-color command.  We use a common function to
+ * locate the student, prompt for the new color, and use the student's
+ * member function to perform the change.
+ */
+void doHairChange(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    Student* student = getStudentByName(db);
+    if (student == NULL)
+	return;				// Not found, error already printed
+
+    const string hairColor = promptRead("New hair color? ", cerr, cin);
+    if (!cin)
+	return;
+
+    student->changeHairColor(hairColor);
+    }
+
+/*
+ * Perform the change-meeting-time command.  We use a common function
+ * to locate the course, prompt for the new days and time, and use the
+ * course's member function to perform the change.
+ */
+void doTimeChange(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    Course* course = getCourseByName(db);
+    if (course == NULL)
+	return;				// Not found, error already printed
+
+    string meetingDays = promptRead("New meeting days? ", cerr, cin);
+    if (!cin)
+	return;
+
+    string meetingHour = promptRead("New meeting time? ", cerr, cin);
+    if (!cin)
+	return;
+
+    /*
+     * Construct the meeting-time string and change the course to that time.
+     */
+    course->changeMeetingTime(meetingDays + " " + meetingHour);
+    }
+
+/*
+ * Perform the show-students command.  All the work is done by the database.
+ */
+void doShowStudents(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    db->showStudents(cout);
+    }
+
+/*
+ * Perform the show-courses command.  All the work is done by the database.
+ */
+void doShowCourses(
+    Registrar_DB*	db)		// Database to operate on
+    {
+    db->showCourses(cout);
+    }
+
+/*
+ * Find a student by prompting the user for his/her name and then
+ * looking him/her up in the registrar's database.
+ *
+ * If the student is found, returns a pointer to the Student record.
+ * Otherwise, prints an error message to cerr and returns NULL.
+ */
+static Student* getStudentByName(
+    Registrar_DB*	db)		// Database to search within
+    {
+    /*
+     * Prompt for the first and last name, giving up if EOF is hit.
+     */
+    const string firstName = promptRead("First name? ", cerr, cin);
+    if (!cin)
+	return NULL;
+    const string lastName = promptRead("Last name? ", cerr, cin);
+    if (!cin)
+	return NULL;
+
+    /*
+     * Use the database's built-in function to search for the student.
+     * If nobody matches, issue an error message.
+     */
+    Student* student = db->findStudentByName(firstName, lastName);
+    if (student == NULL)
+	cerr << "Student " << lastName << ", " << firstName
+	  << " was not found\n";
+
+    return student;
+    }
+
+/*
+ * Find a course by prompting the user for the ID and course number
+ * and then looking it up in the registrar's database.
+ *
+ * If the course is found, returns a pointer to the Course record.
+ * Otherwise, prints an error message to cerr and returns NULL.
+ */
+static Course* getCourseByName(
+    Registrar_DB*	db)		// Database to search within
+    {
+    /*
+     * Prompt for the department (as a string) and the course number
+     * (as an integer), giving up if EOF is hit.
+     */
+    const string department = promptRead("Department? ", cerr, cin);
+    if (!cin)
+	return NULL;
+    cerr << "Course number? " << flush;
+    int courseNumber;
+    if (!(cin >> courseNumber))
+	return NULL;
+
+    /*
+     * Use the database's built-in function to search for the course.
+     * If nothing matches, issue an error message.
+     */
+    Course* course = db->findCourseByName(department, courseNumber);
+    if (course == NULL)
+	cerr << "Course " << department << courseNumber << " was not found\n";
+
+    return course;
+    }

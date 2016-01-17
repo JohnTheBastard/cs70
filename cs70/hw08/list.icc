@@ -1,0 +1,210 @@
+
+/*
+ * File:     list.cc
+ * Authors:  John Hearn and Russ Osborn
+ * Date:     26 March, 2004
+ * Modified: 1 April, 2004
+ * Course:   CS70, Spring 2004
+ * Assignment #8
+ *
+ * This file implements the List class - a templated linked list of objects. 
+ * Also included is the implementation of the ListIterator and Node classes.
+ * (The Node class is a subclass of the List class.)
+ *
+ * The List class itself stores only pointers to the head and tail node of
+ * the list. The Node class stores an object and a pointer to the next
+ * node in the list. This implementation performs pushTail() and length() in
+ * O(1) time.
+ *
+ */
+
+#include "list.hh"
+#include <stdlib.h>
+#include <iostream>
+
+using namespace std;
+
+template <typename OBJECT>
+List<OBJECT>::List()
+  : len(0),				 // Length of (empty) list
+    head(NULL),
+    tail(NULL)
+{
+}
+
+template <typename OBJECT>
+List<OBJECT>::List(const List<OBJECT>& source)
+  : len(0)
+{
+  for (ListIterator<OBJECT> i(source); i; ++i)    
+    {					 // Iterate over the list
+      pushTail(*i);			 // being copied and push all
+    }                                    // values onto the new list.
+}
+
+template <typename OBJECT>
+List<OBJECT>::~List()
+{
+  while (len > 0)			 // Pop all values off the
+    {					 // list, which also deletes
+      popHead();			 // nodes used in the process.
+    }
+}
+
+template <typename OBJECT>
+List<OBJECT>& List<OBJECT>::operator= (const List<OBJECT>& source)
+{
+  while (len > 0)			 // Delete all data currently
+    {					 // being stored on the list
+      popHead();
+    }
+
+  for (ListIterator<OBJECT> i(source); i; ++i) 
+    {					 // Copy new values onto list 
+      pushTail(*i);
+    }  
+
+  return *this;
+}
+
+template <typename OBJECT>
+OBJECT List<OBJECT>::popHead()
+{
+  if(len > 0)				 // If there is data in the 
+    {					 // list, delete the head
+      OBJECT headValue = head->data;	 // node and return the value
+      Node* temp = head;		 // it stored
+      head = head->next;
+      delete temp;
+      len--;
+      return headValue;
+    }
+  cerr << "Attempt to pop empty List.  Aborting." << endl;
+  abort();
+}
+
+template <typename OBJECT>
+OBJECT List<OBJECT>::peekHead()
+{
+  if(len > 0)				 // If there is data in the 
+    {					 // list, return the value
+      OBJECT headValue = head->data;	 // stored in the head 
+      return headValue;			 // node, but do not delete it
+    }
+  cerr << "Attempt to peek empty List.  Aborting." << endl;
+  abort();
+}
+
+template <typename OBJECT>
+void List<OBJECT>::pushHead(OBJECT value)
+{
+  if (len == 0)				 // If this is the first node
+    {					 // in the list, create
+      head = new Node;			 // the head and set pointers
+      head->data = value;		 // appropriately and
+      tail = head;			 // increment length
+      len++;
+      return;
+    }
+  Node* temp = new Node;		 // Otherwise, push a new
+  temp->data = value;			 // node onto the beginning
+  temp->next = head;			 // of the list and adjust
+  head = temp;				 // the head pointer and
+  len++;				 // increment length
+  return;
+}
+
+template <typename OBJECT>
+void List<OBJECT>::pushTail(OBJECT value)
+{
+  if (len == 0)				 // If this is the first node
+    {					 // in the list, create
+      head = new Node;			 // the head and set pointers
+      head->data = value;		 // appropriately and
+      tail = head;			 // increment length
+      len++;
+      return;
+    }
+  
+  tail->next = new Node;		 // Otherwise, push a new node
+  tail = tail->next;			 // onto the tail of the list
+  tail->data = value;			 // and adjust the tail 
+  len++;				 // pointer and length
+  return;
+}
+
+template <typename OBJECT>
+int List<OBJECT>::length() const	 // Return length of list
+{
+  return len;
+}
+
+/* Node Nested Class Functions */
+
+template <typename OBJECT>
+List<OBJECT>::Node::Node()
+  : next(NULL)
+{
+}
+
+template <typename OBJECT>
+List<OBJECT>::Node::~Node()
+{
+}
+
+/* ListIterator Class Functions */
+
+template <typename OBJECT>
+ListIterator<OBJECT>::ListIterator(const List<OBJECT>& source)
+  : target(source.head)
+{
+}
+
+template <typename OBJECT>
+ListIterator<OBJECT>::ListIterator(const ListIterator<OBJECT>& source)
+  : target(source.target)
+{
+}
+
+template <typename OBJECT>
+ListIterator<OBJECT>::~ListIterator()
+{
+}
+
+template <typename OBJECT>
+ListIterator<OBJECT>& 
+  ListIterator<OBJECT>::operator= (const ListIterator<OBJECT>& source)
+{
+  target = source.target;  
+  return *this;
+}
+
+template <typename OBJECT>
+ListIterator<OBJECT>::operator bool() const
+{
+  return target != NULL;	          // False if there are no more
+				          // elements in the list
+}
+
+template <typename OBJECT>
+ListIterator<OBJECT>& ListIterator<OBJECT>::operator++ ()
+{
+  if (!*this)
+    {
+      cerr << "Attempt to increment expired ListIterator. Aborting.";
+      cerr << endl;
+      abort();
+    }
+
+  target = target->next;		 // Move to the next element
+					 // in the list
+  return *this;
+}
+
+template <typename OBJECT>
+OBJECT& ListIterator<OBJECT>::operator* ()
+{
+  return target->data;			 // Give a reference to the
+					 // actual data stored here
+}
+

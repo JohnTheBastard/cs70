@@ -1,0 +1,5 @@
+This is not a C++ program, but nevertheless the file will serve fine for illustrating some of the things that assignment #2 should do.
+An example of the sort of thing that assignment 2 detects is the "goto" statement.
+Another thing it does is detect when "//" isn't surrounded by whitespace.
+A FINAL THING IS LONG STRINGS OF CAPITALS AND SPACES.
+		Of course, the program should count tabs correctly in detecting long lines.

@@ -1,0 +1,61 @@
+Sample, Fred, blond hair
+	0 courses:
+Blow, Joe, brown hair
+	0 courses:
+Silly, Sally, green hair
+	0 courses:
+Merriweather, Alfred, yellow hair
+	0 courses:
+Sleepy, Sam, purple hair
+	0 courses:
+Johnson, Jerry, red hair
+	0 courses:
+CS70 meets TT 1:15
+	Roster:
+CS134 meets MW 2:45
+	Roster:
+MATH55 meets MTWTF 8:00
+	Roster:
+HUM13 meets MTWTF 9:00
+	Roster:
+HUM22 meets MTWTF 10:00
+	Roster:
+PHYS19 meets MTTF 11:00
+	Roster:
+CHEM1 meets M 4:00
+	Roster:
+Sample, Fred, blond hair
+	5 courses: CS70 HUM13 HUM22 MATH55 CHEM1
+Blow, Joe, brown hair
+	1 course: CS70
+Silly, Sally, green hair
+	1 course: CS134
+Merriweather, Alfred, yellow hair
+	1 course: CS134
+Sleepy, Sam, purple hair
+	0 courses:
+Johnson, Jerry, red hair
+	1 course: CS134
+CS70 meets TT 1:15
+	Roster:
+	Blow, Joe
+	Sample, Fred
+CS134 meets MW 2:45
+	Roster:
+	Johnson, Jerry
+	Merriweather, Alfred
+	Silly, Sally
+MATH55 meets MTWTF 8:00
+	Roster:
+	Sample, Fred
+HUM13 meets MTWTF 9:00
+	Roster:
+	Sample, Fred
+HUM22 meets MTWTF 10:00
+	Roster:
+	Sample, Fred
+PHYS19 meets MTTF 11:00
+	Roster:
+CHEM1 meets TT 3:00
+	Roster:
+	Sample, Fred

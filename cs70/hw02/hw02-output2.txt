@@ -1,0 +1,46 @@
+Line 11 is too long: 81 characters.
+Line 15 is too long: 81 characters.
+Line 18 is too long: 81 characters.
+Line 19 is too long: 81 characters.
+Line 20 is too long: 81 characters.
+Line 21 is too long: 81 characters.
+Line 22 is too long: 81 characters.
+Line 23 is too long: 81 characters.
+Line 24 is too long: 81 characters.
+Line 25 is too long: 81 characters.
+Line 28 is too long: 89 characters.
+Line 34 has a string of 11 capital letters and spaces.
+Line 35 has a string of 12 capital letters and spaces.
+Line 36 has a string of 11 capital letters and spaces.
+Line 37 has a string of 18 capital letters and spaces.
+Line 43 has a string of 11 capital letters and spaces.
+Line 46 has a string of 11 capital letters and spaces.
+Line 49 has a string of 12 capital letters and spaces.
+Line 52 seems to contain a goto statement.
+Line 57 seems to contain a goto statement.
+Line 58 seems to contain a goto statement.
+Line 59 seems to contain a goto statement.
+Line 60 seems to contain a goto statement.
+Line 61 seems to contain a goto statement.
+Line 62 seems to contain a goto statement.
+Line 63 seems to contain a goto statement.
+Line 64 seems to contain a goto statement.
+Line 73 seems to contain a goto statement.
+Line 75 contains a // comment without surrounding whitespace.
+Line 76 contains a // comment without surrounding whitespace.
+Line 77 contains a // comment without surrounding whitespace.
+Line 78 contains a // comment without surrounding whitespace.
+Line 79 contains a // comment without surrounding whitespace.
+Line 80 contains a // comment without surrounding whitespace.
+Line 81 contains a // comment without surrounding whitespace.
+Line 82 contains a // comment without surrounding whitespace.
+Line 92 is too long: 159 characters.
+Line 92 has a string of 31 capital letters and spaces.
+Line 92 seems to contain a goto statement.
+Line 92 contains a // comment without surrounding whitespace.
+Line 93 is too long: 166 characters.
+Line 93 has a string of 24 capital letters and spaces.
+Line 93 seems to contain a goto statement.
+Line 93 contains a // comment without surrounding whitespace.
+Line 99 has a string of 23 capital letters and spaces.
+Line 103 is too long: 129 characters.

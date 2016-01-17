@@ -1,0 +1,204 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 11
+Date:	        23 April, 2004
+
+
+--------------------
+ Purpose of Program 
+--------------------
+
+This program implements a binary tree to store a DMV database. It
+allows users to add new drivers to the database, query the database
+for existence of drivers (based on license number), remove drivers
+from the database, and check whether or not a driver was of legal
+drinking age on a given day.
+
+------------
+ I/O Format 
+------------
+
+INPUT: The input format for this program is a binary file that has a
+list of commands. The possible commands are:
+
+'i', insert - followed by license prefix (a character), license
+number, the length of the new driver's name, the new driver's name,
+and finally the driver's month, day, and year of birth. 
+
+'r', remove - followed by a license prefix and a license
+number. Removes the given driver from the database.
+
+'f', find - followed by license prefix and number. Looks up given
+driver in the database. Prints data if driver found.
+
+'a', age - followed by a license prefix and number, then a month, day,
+and year. Reports whether or not the given driver was 21 on the date
+given as input.
+
+'p', print - no following commands. Prints out the contents of the DMV
+database in order (based on license prefix and number).
+
+
+OUTPUT: The program generates output as a response to every input
+command. The exact format of the output is described on the CS70
+Spring 2004 Assignment 11 web page. For every command, a predictable
+corresponding output is generated (i.e. find outputs the information
+of the driver if they're found). 
+
+
+
+
+-------------------
+ General Structure 
+-------------------
+
+This program is contained within 7 files.
+
+These are:
+assign_11.cc
+driver.*			Driver class, stores information about
+				a single driver in the database.
+
+node.*				Node class, basic element in the
+				binary tree used to store the database.
+
+tree.*				Tree class, interface to the database
+
+
+METHODS:
+
+We implemented the following public methods:
+
+driver.cc --- Driver Class
+
+  Driver(char prefix, unsigned int number, string name, unsigned char
+	month, unsigned char day, unsigned short year)
+
+	Constructor for the Driver class, takes in driver information
+as parameters.
+
+  ~Driver()
+
+	Destructor.
+  
+  ostream& operator<< (ostream& stream, Driver& licensedDriver)
+
+	Stream output for the Driver class, outputs this driver's information.
+
+
+node.cc --- Node Class
+
+  Node(Driver licensedDriver)
+
+	Constructor for the Node class, takes as input a driver to put
+in the node as data.
+
+  ~Node()
+
+	Destructor. Cleans up memory allocated for the driver stored here.
+  
+  bool insert(Driver licensee)
+
+	Inserts the given driver into the tree rooted at this
+node. Once insertion point is found, a new Node is created.
+
+  bool remove(char prefix, unsigned int number, Node* parent);
+
+	Removes the driver with given license from the tree rooted at
+this node. 
+
+  bool removeHelper(Node* &child)
+
+	Helper function for the remove function. Removes the Node that
+is the target of the child parameter (reference to a pointer). Ensures
+binary tree properties are maintained after child node is deleted.
+  
+  Driver* find(char prefix, unsigned int number);
+
+	Find driver with given license number in the tree, and print
+out his data if found. If not found, an appropriate error is printed.
+
+  Node* findMinParent();
+
+	This function returns a pointer to the parent of the minimum
+node in the subtree rooted at this node.
+
+  void print();				
+
+	Print all drivers in the subtree rooted at this node in order.
+
+tree.cc --- Tree class
+
+  bool insert(char prefix, unsigned int number, string name, 
+	unsigned char month, unsigned char day, unsigned short year)
+
+	Insert a driver with the given parameters into the tree. 
+  
+  bool remove(char prefix, unsigned int number)
+
+	Remove driver with given license from the tree.
+  
+  Driver* find(char prefix, unsigned int number)
+
+	Find the driver with the given license number in the tree, and
+print his information if found. If not found, report this fact.
+  
+  bool ageCheck(char prefix, unsigned int number, unsigned char qMonth,	
+		unsigned char qDay, unsigned short qYear)
+
+	Returns true if the driver with the given license is 21 on the
+given date.
+  
+  void print();
+  
+	Print the database in order.
+
+  
+DATA STRUCTURES:
+
+Tree
+
+	Binary tree of nodes. Acts as an interface to the database by
+storing a pointer to the root of the tree and allowing insertion,
+lookup, deletion, and output.
+
+
+Node
+
+	Individual member of the binary tree database. Stores a driver
+and pointers to right and left children.
+
+
+Driver
+
+	Stores the information about a single driver in the
+database. This includes license number, full name, and date of birth.
+
+
+
+ALGORITHMS:
+
+Deletion from the binary tree:
+	First find the node to be removed. If it is found in the
+tree. If it has one or zero children, removal is simple; the node is
+deleted and its child (if present) is moved into its former
+position. If the node has two children, the minimum child in its right
+subtree is found and then spliced into the newly vacated position.
+
+
+---------------------------------------
+ Limitations and Possible Improvements 
+---------------------------------------
+
+The binary tree used to support the database is the major shortcoming
+of this project. The Tree class requires the use of an external Node
+class, which in turn requires the Driver class. This means that the
+binary tree is very specific; it would take a large amount of work to
+re-use any of the code here. Additionally, our binary tree is a
+non-balanced tree, which can lead to O(N) performance in the case of
+sorted input. 
+
+Other than the binary tree, the program also is limited in its ability
+to read from binary files only. This means that the input format is
+different on different platforms and requires special external helper
+programs to generate binary input from non-binary source.

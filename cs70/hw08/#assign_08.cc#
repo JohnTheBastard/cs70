@@ -1,0 +1,697 @@
+e/*
+ * CS 70, Spring 2004, Assignment 8
+ *
+ * Bar simulation
+ *
+ * This program simulates the operation of a small bar over a brief
+ * period of time.  The bar has a single bartender, who mixes all
+ * drinks, and an unspecified number of table servers.  The bartender
+ * services both the table servers and the individual drinkers who sit
+ * at the bar.  Table servers have priority; if a server arrives while
+ * an individual drinker is being serviced, the bartender will suspend
+ * making the individual's drink until the table server's order is
+ * complete.
+ *
+ * The simulation operates by pre-generating a list of requests from
+ * individual drinkers and a list of server requests.  These requests
+ * are placed into two arrival queues before the actual simulation
+ * begins.  The simulation is performed in the "barMonkey" function,
+ * and is described more fully there.  It operates by stepping the
+ * simulated time forward one second at a time, and at each step the
+ * function decides what action to take.  Statistics are kept during
+ * the run, and reported at the end of the simulation.
+ *
+ * All times used in the simulation, with the exception of the total
+ * run time and the suspension penalty, are exponentially-distributed
+ * random variables with a chosen mean.
+ *
+ * The parameters of the simulation can be modified with command-line
+ * switches, as follows.
+ *
+ *	-D n	Specify the mean inter-arrival time for solo drinkers,
+ *		in seconds.  (Default 1200 seconds, or 20 minutes.)
+ *	-M n	Specify the maximum number of drinks a server can
+ *		carry.  The number of drinks in any given request is
+ *		uniformly distributed between 1 and this value,
+ *		inclusive.  (Default 10 drinks.)
+ *	-P n	Specify the penalty for suspending service to a
+ *		drinker.  If an individual drinker is being serviced
+ *		when a table server arrives, service to the individual
+ *		drinker is suspended.  This parameter reflects the
+ *		cost, in seconds, of that suspension.  The suspension
+ *		cost is a constant, rather than a random variable.
+ *		(Default 10 seconds).
+ *	-r n	Specify the total run time for the simulation, in
+ *		(fractional) hours.  Drinkers and table servers will
+ *		stop arriving after this time interval elapses.  The
+ *		simulation will usually continue running for a while
+ *		after this time, due to service requests that remain
+ *		to be completed.  (Default 5 hours.)
+ *	-S x n	Specify the seed to be used to initialize random-number
+ *		generator 'x'.  If this switch is not given, the
+ *		random seed will be selected from automatically (and
+ *		differently for each run).  The PRNGs are named as
+ *		follows:
+ *		  drinker	Drinker arrivals
+ *		  server	Server arrivals
+ *		  drinks	Server drink counts
+ *		  service	Service times
+ *		  all		All PRNGs are initialized from the
+ *				given seed.  The drinker PRNG will be
+ *				seeded with x, the server with x+1,
+ *				the drink count with x+2, and the
+ *				service time with x+3.  BTW, this
+ *				trick wouldn't be a good idea with
+ *				most pseudorandom number generators,
+ *				but Mersenne Twist still generates
+ *				fairly good results with sequential
+ *				seeds.
+ *	-s n	Specify the mean interarrival time for table server,
+ *		in seconds.  (Default 300 seconds, or 5 minutes.)
+ *	-T n	Specify the mean service time needed by the bartender
+ *		to mix a single drink.  Note that when the bartender
+ *		is mixing drinks for a table server, several drink
+ *		service times will be needed to complete service.
+ *		(Default 40 seconds.)
+ */
+
+#include "barrequester.hh"
+#include "list.hh"
+#include "mtwist.h"
+#include "randistrs.h"
+#include "simulationconstants.hh"
+#include "simulationtime.hh"
+
+#include <cassert>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+/*
+ * Table of contents: the following functions are defined in this file.
+ */
+int			main(int argc, char* argv[]);
+					// Main driver for the simulation
+static int		processOptions(int argc, char* argv[],
+			  double& drinkerArrivalTime,
+			  mt_distribution& drinkerPRNG,
+			  double& serverArrivalTime,
+			  mt_distribution& serverPRNG,
+			  int& serverMaxDrinks,
+			  mt_distribution& drinkCountPRNG,
+			  double& serviceTime,
+			  mt_distribution& servicePRNG,
+			  SimulationTime& suspensionPenalty,
+			  SimulationTime& simulationRunTime);
+					// Process option arguments
+static void		usage(char* progname);
+					// Issue a usage message
+static void		barMonkey(List<Drinker>& drinkerQueue,
+			  List<TableServer>& serverQueue);
+					// Perform the  actual function
+
+/*
+ * Main driver routine.  This function processes option arguments,
+ * initializes the two request queues, and calls the barMonkey
+ * function to perform the actual simulation.  Finally, it reports
+ * statistics on the simulation to cout.
+ */
+int main(
+    int			argc,		// Argument count
+    char*		argv[])		// Argument vector.
+    {
+    /*
+     * Parameters of the simulation.  All of these values are
+     * (potentially) set by processOptions.
+     */
+    double		drinkerArrivalTime = DRINKER_ARRIVAL_TIME;
+					// Interarrival time for solo drinkers
+    double		serverArrivalTime = SERVER_ARRIVAL_TIME;
+					// Interarrival time for table servers
+    int			serverMaxDrinks = SERVER_MAX_DRINKS;
+					// Maximum drinks a server can carry
+    double		serviceTime = SERVICE_TIME;
+					// Time needed to mix one drink
+    SimulationTime	simulationRunTime = SIMULATION_RUN_TIME;
+					// Total time simulation should run
+    SimulationTime	suspensionPenalty = SUSPENSION_PENALTY;
+					// Time penalty for suspending the
+					// ..mixing of a drink
+
+    /*
+     * Random-distribution objects.  We keep a separate
+     * random-distribution object for each random variable in the
+     * simulation (drinker arrivals, server arrivals, and server drink
+     * counts) so that the various random-number streams won't be
+     * correlated.
+     *
+     * These might be seeded by processOptions if the -S switch is given.
+     */
+    mt_distribution	drinkCountPRNG(true);
+					// For drink counts
+    mt_distribution	drinkerPRNG(true);
+					// For drinker arrivals
+    mt_distribution	serverPRNG(true);
+					// For server arrivals
+    mt_distribution	servicePRNG(true);
+					// For service times
+
+    /*
+     * Process all option arguments.  Note that all but the first two
+     * parameters are passed by reference, which means that the
+     * function can (and does) modify them.  The return value is the
+     * number of the first non-option argument on the command line.
+     */
+    int argNo = processOptions(argc, argv, drinkerArrivalTime, drinkerPRNG,
+      serverArrivalTime, serverPRNG, serverMaxDrinks, drinkCountPRNG,
+      serviceTime, servicePRNG, suspensionPenalty, simulationRunTime);
+
+    /*
+     * There should be no non-switch arguments.
+     */
+    if (argNo != argc)
+	usage(argv[0]);
+
+    /*
+     * Certain of our parameters need to be known to the BarRequester
+     * class.  One way to make them available would be to put them in
+     * global variables.  Another, chosen here, is to call a static
+     * member function and let the class choose how to preserve them.
+     */
+    BarRequester::setParameters(serviceTime, servicePRNG, suspensionPenalty);
+
+    /*
+     * Prepare for the simulation by generating a queue of individual
+     * drinkers and a queue of servers.  It is both wasteful and
+     * inaccurate to do things this way, but it's simpler.  It's
+     * wasteful because we build long queues and use each element
+     * once, rather than waiting to generate an element when it's
+     * needed.  It's inaccurate because in real life a drinker doesn't
+     * get in line to reorder until he or she has finished his drink,
+     * and a table server doesn't return to the bar until the current
+     * drinks have been distributed and a new order has been taken.  A
+     * proper simulation would account for these phenomena, but doing
+     * so would complicate the code (which is already too complex for
+     * our purposes).
+     */
+    List<Drinker> drinkerQueue;		// This will hold all drinkers
+    SimulationTime when = 0;		// This will be the next drinker's
+					// ..arrival time
+    while (when < simulationRunTime)
+	{
+	/*
+	 * Since drinkerArrivalTime represents the INTER-arrival time
+	 * for drinkers (i.e., the time between drinkers showing up),
+	 * we can get the next arrival time by adding the interarrival
+	 * time to the current one.  The drinkerPRNG.exponential
+	 * function returns an exponentially distributed random
+	 * number.  We create the drinker and push him or her onto the
+	 * tail of the queue in a single operation.
+	 */
+	when += (SimulationTime)(int)(
+	  drinkerPRNG.exponential(drinkerArrivalTime) + 0.5);
+	drinkerQueue.pushTail(Drinker(when));
+	}
+
+    /*
+     * Repeat the above loop for table servers.
+     */
+    List<TableServer> serverQueue;	// This will hold all servers
+    for (when = 0;  when < simulationRunTime;  )
+	{
+	/*
+	 * The calculation of the server arrival time is the same as
+	 * above.  The second argument to the TableServer constructor
+	 * is the number of drinks.  The expression we use will
+	 * generate a uniform random distribution between 1 and the
+	 * maximum number of drinks, inclusive.
+	 */
+	when += (SimulationTime)(int)(
+	  serverPRNG.exponential(serverArrivalTime) + 0.5);
+	serverQueue.pushTail(TableServer(when,
+	  drinkCountPRNG.iuniform(1, serverMaxDrinks + 1)));
+	}
+
+    /*
+     * We now have our arrival queues.  Run the simulation, and then
+     * report final statistics to cout.
+     */
+    barMonkey(drinkerQueue, serverQueue);
+
+    Drinker::reportStatistics(cout);
+    TableServer::reportStatistics(cout);
+
+    return 0;
+    }
+
+/*
+ * Option processing.  Scan through the arguments, looking at
+ * switches.  If we run into a non-switch argument, exit the function.
+ *
+ * If an illegal switch is detected, we will print a usage message to
+ * cerr and terminate the program with an exit status of 2.
+ *
+ * The return value of this function is the number of the first
+ * non-switch argument encountered.  If there are no non-switch
+ * arguments, the return value equals argc.
+ *
+ * The reader will note that this function is fairly long, even though
+ * it does relatively little.  That is generally true of
+ * switch-processing functions, and it is not considered bad style so
+ * long as the function limits itself to simple operations such as
+ * setting Boolean flags.
+ */
+static int processOptions(
+    int			argc,		// Argument count passed to main
+    char*		argv[],		// Argument vector passed to main
+	/*
+	 * NOTE: All of the following arguments are modified if the
+	 * associated flag appears.
+	 */
+    double&		drinkerArrivalTime,
+					// Interarrival time for solo drinkers
+    mt_distribution&	drinkerPRNG,	// PRNG for drinker arrivals
+    double&		serverArrivalTime,
+					// Interarrival time for table servers
+    mt_distribution&	serverPRNG,	// PRNG for server arrivals
+    int&		serverMaxDrinks,
+					// Maximum drinks a server can carry
+    mt_distribution&	drinkCountPRNG,	// PRNG for drink counts
+    double&		serviceTime,
+					// Time needed to mix one drink
+    mt_distribution&	servicePRNG,	// PRNG for service times
+    SimulationTime&	suspensionPenalty,
+					// Time penalty for suspending the
+					// ..mixing of a drink
+    SimulationTime&	simulationRunTime)
+					// Total time simulation should run
+    {
+    /*
+     * Note that the loop index is modified inside the body of
+     * the loop; this is generally poor style but is common in
+     * argument processing.  In this case, the modification is done
+     * inside the processing of the "s" switch.
+     */
+    for (int argNo = 1;  argNo < argc;  argNo++)
+	{
+	if (argv[argNo][0] != '-')	// End of switches?  If so, exit
+	    return argNo;		// ..option processing
+
+	/*
+	 * All other switch options should consist of a single hyphen,
+	 * an alphabetic character, and nothing else.  At this point
+	 * we know that the hyphen exists.  Check to make sure that
+	 * there is exactly one character following it.
+	 */
+	if (argv[argNo][1] == '\0'  ||  argv[argNo][2] != '\0')
+	    usage(argv[0]);
+
+	/*
+	 * Process switch options.  We do this in a "switch" statement
+	 * so that it is easy to add new options later.
+	 */
+	switch (argv[argNo][1])
+	    {
+	    case '-':			// --: end of arguments
+		{
+		/*
+		 * By convention, the special switch option "--" means that
+		 * all following arguments are non-option arguments, even if
+		 * they start with a hyphen.  If we run into that switch, we
+		 * must skip over it but then exit the option-processing loop.
+		 */
+		argNo++;		// Skip over the --
+		return argNo;		// Go to non-option argument processing
+		}
+
+	    case 'D':			// -D n: drinker interarrival time
+		{
+		/*
+		 * Processing an option that has an argument is a bit
+		 * tricky.  First, we must make sure that there is
+		 * actually a following argument.  Second, we must
+		 * process that argument appropriately (in this case,
+		 * by converting it to a "double" and saving it).
+		 * Third, we must make sure that the option-processing
+		 * loop does not try to treat the argument as a switch
+		 * itself.  We do that by incrementing the loop index,
+		 * as noted in the comments before the loop.  The
+		 * first and third operations are combined.
+		 */
+		if (++argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		/*
+		 * Convert the next argument to a double (strtod) and
+		 * save it.  If *lastValid isn't '\0', the conversion failed.
+		 */
+		char* lastValid;
+		drinkerArrivalTime = strtod(argv[argNo], &lastValid);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+		break;
+		}
+	    case 'M':			// -M n: Max drinks per server
+		{
+		if (++argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		/*
+		 * Convert the next argument to an integer (strtol) and
+		 * save it.  If *lastValid isn't '\0', the conversion failed.
+		 */
+		char* lastValid;
+		serverMaxDrinks = strtol(argv[argNo], &lastValid, 10);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+		break;
+		}
+	    case 'P':			// -P n: suspension penalty
+		{
+		if (++argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		/*
+		 * Convert the next argument to an integer (strtol) and
+		 * save it.  If *lastValid isn't '\0', the conversion failed.
+		 */
+		char* lastValid;
+		suspensionPenalty = strtol(argv[argNo], &lastValid, 10);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+		break;
+		}
+	    case 'r':			// -r n: simulation run time, hours
+		{
+		if (++argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		char* lastValid;
+		simulationRunTime =
+		  (int)(strtod(argv[argNo], &lastValid) * SECS_IN_HOUR);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+		break;
+		}
+	    case 'S':			// -S x n: specify random seed x
+		{
+		argNo += 2;		// Count arguments we'll swallow
+		if (argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		char* lastValid;
+		long randomSeed = strtol(argv[argNo], &lastValid, 10);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+
+		if (argv[argNo - 1] == string("all"))
+		    {
+		    drinkerPRNG.seed32(randomSeed);
+		    serverPRNG.seed32(randomSeed + 1);
+		    drinkCountPRNG.seed32(randomSeed + 2);
+		    servicePRNG.seed32(randomSeed + 3);
+		    }
+		else if (argv[argNo - 1] == string("drinker"))
+		    drinkerPRNG.seed32(randomSeed);
+		else if (argv[argNo - 1] == string("server"))
+		    serverPRNG.seed32(randomSeed);
+		else if (argv[argNo - 1] == string("drinks"))
+		    drinkCountPRNG.seed32(randomSeed);
+		else if (argv[argNo - 1] == string("service"))
+		    servicePRNG.seed32(randomSeed);
+		else
+		    usage(argv[0]);
+		break;
+		}
+
+	    case 's':			// -s n: server interarrival time
+		{
+		if (++argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		char* lastValid;
+		serverArrivalTime = strtod(argv[argNo], &lastValid);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+		break;
+		}
+	    case 'T':			// -T n: service time to mix a drink
+		{
+		if (++argNo >= argc)	// Make sure there's an argument
+		    usage(argv[0]);	// ..if not, complain and exit
+
+		char* lastValid;
+		serviceTime = strtod(argv[argNo], &lastValid);
+		if (*lastValid != '\0')
+		    usage(argv[0]);
+		break;
+		}
+	    default:			// Default: unrecognized option
+		{
+		usage(argv[0]);
+		break;
+		}
+	    }
+	}
+
+    /*
+     * We can only get here if we ran out of arguments.  Return argc
+     * to the caller, indicating that there are no non-option
+     * arguments.
+     */
+    return argc;
+    }
+
+/*
+ * Issue a usage message to cerr, and terminate the program with a
+ * failure status.
+ */
+static void usage(			// Issue a usage message
+    char*		progname)	// Name we were executed under
+    {
+    cerr << "Usage: " << progname
+      << " [-D n] [-M n] [-P n] [-r n] [-S n] [-s n] [-T n]\n";
+    cerr << "Switches:\n";
+    cerr << "\t-D n\tSpecify solo drinker interarrival time.\n";
+    cerr << "\t-M n\tSpecify maximum drinks a server can carry.\n";
+    cerr << "\t-P n\tSpecify penalty for suspending service to a drinker.\n";
+    cerr << "\t-r n\tSpecify simulation run time, in (floating) hours.\n";
+    cerr << "\t-S x n\tSpecify the seed to be used for PRNG 'x'.\n";
+    cerr <<
+      "\t\t'x' can be 'all', 'drinker', 'server', 'drinks', or 'service'.\n";
+    cerr << "\t-s n\tSpecify table server interarrival time.\n";
+    cerr << "\t-T n\tSpecify service time to mix a drink.\n";
+    exit(2);
+    }
+
+/*
+ * Simulate the operation of a bar.  The parameters to this function
+ * are a queue of individual drinker requests and a queue of table
+ * server requests.  These queues are destroyed by the function.
+ *
+ * Please see simulation documentation for information concerning the model
+ * of bar operation being implemented here (such as drinker/server 
+ * priorities).  
+ *
+ * Based on the two randomly generated parameter queues, this function 
+ * simulates the bartender's time usage and prints information about his 
+ * performance to cout. Each of his actions and the time required to perform 
+ * them are printed to the screen. When the queues are emptied statistics about
+ * the number of customers tended, drinks served, and customer wait times are
+ * displayed.
+ *
+ * This simulation is run in a while loop containing a fairly elaborate
+ * condition structure.  The actual conditions being tested are somewhat long
+ * (in terms of character length). We used boolean variables (posDrinkLen, 
+ * posServeLen, etc.) to represent them in order to improve readability.   
+ *
+ * jhearn/rosborn - 4 April 2004
+ */
+static void barMonkey(
+    List<Drinker>&	drinkerQueue,	// Queue of drinker requests
+    List<TableServer>&	serverQueue)	// Queue of table server requests
+    {
+    /*
+     * The single most important variable in the simulation is the
+     * simulated time.  Here, we record the current simulated time (in
+     * seconds).
+     */
+    SimulationTime currentTime = 0;
+
+    Drinker* currentDrinker = NULL;	// Pointer to drinker being tended
+					// (dummyDrinker)
+    TableServer* currentServer = NULL;	// Pointer to server being tended
+					// (dummyServer)
+    Drinker dummyDrinker;		// Used to store drinker most recently
+					// popped from the drinker list until
+					// done drinking
+    TableServer dummyServer;		// Used to store server most recently
+					// popped from the server list until
+					// done serving
+    
+    const SimulationTime SIM_TIME(1);	// Unit of time used to increment
+					// a server or a drinker's time
+					// (currently set to 1 second)
+
+    /* Bools storing simulation conditions for improved readability */
+
+    bool posDrinkLen = drinkerQueue.length() > 0;
+    bool posServeLen = serverQueue.length() > 0;
+    bool drinkQNotNull = currentDrinker != NULL;
+    bool serveQNotNull = currentServer != NULL;
+    bool drinkerUp = posDrinkLen 
+      && drinkerQueue.peekHead().dueTime() <= currentTime;
+    bool serverUp = posServeLen 
+      && serverQueue.peekHead().dueTime() <= currentTime;
+
+    /* The Simulation */
+
+    while (posDrinkLen || posServeLen || drinkQNotNull || serveQNotNull)
+        { 
+	/*
+	 * While there are drinkers or servers enqueued or being tended,
+	 * continue simulation.
+	 */
+
+	/* Update all conditions for while loop continuation */
+
+	posDrinkLen = drinkerQueue.length() > 0;
+	posServeLen = serverQueue.length() > 0;
+	drinkQNotNull = currentDrinker != NULL;
+	serveQNotNull = currentServer != NULL;
+	drinkerUp = posDrinkLen 
+	  && drinkerQueue.peekHead().dueTime() <= currentTime;
+	serverUp = posServeLen 
+	  && serverQueue.peekHead().dueTime() <= currentTime;
+
+	/*
+	 * We think it is actually only necessary to update drinkerUp and 
+	 * serverUp at this point, as the other conditions are all reevaluated 
+	 * during the loop at any point that their values may change.  Under 
+	 * circumstances in which time elapses but no actions are taken,
+	 * drinkerUp and serverUp may change. It improves readability to just
+	 * reevaluate those two conditions at the beginning of the loop 
+	 * instead of at various points in the condition structure and the 
+	 * overhead is small, so we made this concession.
+	 */
+
+
+	if (drinkQNotNull && serverUp)
+            {
+	    /*
+	     * There is a drinker being tended but there is a server waiting:
+	     *     Push drinker back on the (head of) drinker queue
+	     *     Update drinkQNotNull
+	     */
+            currentDrinker->suspend(cout, currentTime);
+	    drinkerQueue.pushHead(*currentDrinker);
+	    currentDrinker = NULL;
+	    drinkQNotNull = false;
+	    }
+	if (!(drinkQNotNull || serveQNotNull))
+	    {
+	    /*
+	     * Not currently serving anyone
+	     */
+	    if (serverUp)
+	        {
+		/*
+		 * If there is a server ready to be tended:
+		 *     Pop server from queue
+		 *     Start server's time
+		 *     Update relevant conditions
+		 */
+		dummyServer = serverQueue.popHead();
+		currentServer = &dummyServer;
+		currentServer->start(cout, currentTime);
+		posServeLen = serverQueue.length() > 0;		
+		serveQNotNull = currentServer != NULL;
+		serverUp = posServeLen && 
+		  serverQueue.peekHead().dueTime() <= currentTime;
+		}
+	    else if (drinkerUp)
+	        {
+		/* 
+		 * There is a drinker waiting to be tended:
+		 *     Pop drinker from queue
+		 *     Start drinker's time
+		 *     Update relevant conditions 
+		 */
+		dummyDrinker = drinkerQueue.popHead();
+	        currentDrinker = &dummyDrinker;
+		currentDrinker->start(cout, currentTime);
+		posDrinkLen = drinkerQueue.length() > 0;		
+		drinkQNotNull = currentDrinker != NULL;                
+		drinkerUp = posDrinkLen && 
+		  drinkerQueue.peekHead().dueTime() <= currentTime;
+		}
+	    }
+	if (serveQNotNull)
+	    {
+	    /*
+	     * There is a server being tended
+	     */
+	    if (currentServer->isDone())
+	        {
+		/*
+		 * If server is done:
+		 *    Stop server's time
+		 *    Adjust currentServer pointer
+		 *    Update serveQNotNull
+		 */
+		currentServer->finish(cout, currentTime);
+		currentServer = NULL;
+		serveQNotNull = false;
+		}
+	    else
+	        {
+		/* 
+		 * Else:
+		 *    Tend server (increase server's time)
+		 *    Increment currentTime
+		 */
+		currentServer->giveService(SIM_TIME);
+		++currentTime;
+		}
+	    }
+	else if (drinkQNotNull)
+	    {
+	    /*
+	     * Else if there is currently a drinker being tended:
+	     */
+	    if (currentDrinker->isDone())
+	        {
+		/*
+		 * If the drinker is done:
+		 *    Stop drinker's time
+		 *    Adjust currentDrinker pointer
+		 *    Update drinkQNotNull
+		 */
+		currentDrinker->finish(cout, currentTime);
+		currentDrinker = NULL;
+		drinkQNotNull = false;
+		}
+	    else
+	        {
+		/*
+		 * Else:
+		 *    Tend drinker (increase drinker's time)
+		 *    Increment currentTime
+		 */
+		currentDrinker->giveService(SIM_TIME);
+		++currentTime;
+		}	    
+	    }
+	else
+	    {
+	    /*
+	     * Else (not serving anyone)
+	     *    Increment time
+	     */
+	      ++currentTime;
+	    }
+	}
+    }
+

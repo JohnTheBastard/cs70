@@ -1,0 +1,93 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 1
+Date:		28 January, 2004
+
+
+Purpose of Program
+------------------
+
+This class provides the basic operations for rational numbers. This includes
+arithmetic operations, comparison operators, and input and output methods.
+
+I/O Format
+----------
+
+The class itself does not generate output on its own, however the test program
+uses the input and output methods defined in the class.
+
+
+General Structure
+-----------------
+
+The class is contained within two files. One file is rat.cc which contains
+the actual implementation of the operators. The other file is rat.hh which 
+is the header file for the class. 
+
+Methods
+
+	Arithmetic Operators: '+', '-', '*', '/', abs
+	
+	Comparison Operators: '<', '>', '=='
+
+	Stream I/O Operators: '<<', '>>'
+
+	Incremental Operators: '++', '+='  
+
+	Greatest Common Divisor: gcd
+
+	Normalize: normalize
+		note: Normalize reduces fractional representation of 
+			rational numbers
+
+	Data Structures: rat class containing two integers (top and bot)
+			 representing the numerator and denominator of
+			 a rational number.
+
+Algorithms
+
+The program implements Euclid's Algorithm for finding the greatest common
+divisor. The following is a description of the algorithm taken from
+http://www-mitpress.mit.edu/sicp/chapter1/node16.html.
+
+
+The idea of the algorithm is based on the observation that, if r is 
+the remainder when a is divided by b, then the common divisors of a
+and b are precisely the same as the common divisors of b and r.
+Thus, we can use the equation
+
+		GCD(a, b) = GCD(b, r)
+
+to successively reduce the problem of computing a GCD to the problem
+of computing the GCD of smaller and smaller pairs of integers.
+
+For example,
+
+GCD(206,40) = GCD(40,6)
+            = GCD(6,4)
+            = GCD(4,2)
+            = GCD(2,0)
+            = 2
+
+reduces GCD(206,40) to GCD(2,0), which is 2.
+
+It is possible to show that starting with any two positive integers
+and performing repeated reductions will always eventually produce a
+pair where the second number is 0. Then the GCD is the other number
+in the pair. This method for computing the GCD is known as Euclid's
+Algorithm.
+
+
+Files
+-----
+
+	rat.cc - Implementation of the operators for rational numbers
+	
+	rat.hh - Header file for the rat class.
+
+Limitations and Possible Improvements
+-------------------------------------
+
+Currently, there is no '*=' or '/=' operator for the rat class. The size of
+the rational number stored is limited only by the storage space available
+for an int. 

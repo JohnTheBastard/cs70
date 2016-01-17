@@ -1,0 +1,60 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 11
+Date:	        23 April, 2004
+
+
+--------------------
+ Purpose of Program 
+--------------------
+
+
+------------
+ I/O Format 
+------------
+
+INPUT: 
+
+
+
+OUTPUT: 
+
+
+
+
+-------------------
+ General Structure 
+-------------------
+
+This program is contained within ???? files.
+
+These are:
+assign_11.cc
+
+
+
+METHODS:
+
+We implemented the following public methods:
+
+
+
+  
+DATA STRUCTURES:
+
+Tree
+
+
+Node
+
+
+
+
+ALGORITHMS:
+
+
+
+---------------------------------------
+ Limitations and Possible Improvements 
+---------------------------------------
+

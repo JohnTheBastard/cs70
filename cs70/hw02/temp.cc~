@@ -1,0 +1,547 @@
+ /****************************************************************************\
+ * File:    assign_02.cc                                                      *
+ * Authors: John Hearn and Russ Osborn                                 
+ * Date created: 29 January 2004
+ * Date modified:
+ *
+ \****************************************************************************/
+
+
+
+#include <ctype.h>
+#include <iostream.h>
+#include "dumbreadline.hh"
+
+/* Function prototypes for this file. */
+
+void lenCheck(int lineNum, char buffer[]);
+// Used to check that no line exceeds MAX_LENGTH characters
+// (including tab spacing).
+
+void capsCheck(int lineNum, char buffer[]);
+// Used to check that no string of capitals and enclosed whitespace exceeds
+// MAX_CAPS.
+
+void gotoCheck(int lineNum, char buffer[]);
+// Used to check for possible 'goto' statements.
+
+void commentCheck(int lineNum, char buffer[]);
+// Used to ensure that every '//' comment has whitespace around it.
+
+const int MAX_LENGTH = 80;      // set maximum line length to 80 characters
+const int MAX_CAPS = 10;        // set maximum consecutive capitals allowed
+const int BUFF_SIZE = 1024;     // set input stream length to 1024
+const int TAB_WIDTH = 8;        // set default tab with
+int Verbosity = 0;              // used for error checking
+
+int main()
+{
+  char buffer[BUFF_SIZE];
+  int lineNum = 0;
+  
+  dumbReadLine(cin, buffer, BUFF_SIZE);
+                                        // read line from file to buffer
+  
+  while(cin)
+    {
+ 
+      lineNum++;
+ 
+      if(Verbosity > 0)
+	{
+	  cout << "Have read " << lineNum << "." << endl;
+	  cout << "   Calling lenCheck." << endl;
+	}
+           
+      lenCheck(lineNum, buffer);        // make sure line length < MAX_LENGTH
+      
+      if(Verbosity > 0)
+	{
+	  cout << "Have read " << lineNum << "." << endl;
+	  cout << "   Calling capsCheck." << endl;
+	}
+      
+      
+      capsCheck(lineNum, buffer);       // make sure no string of consecutive
+                                        // caps and enclosed whitespace
+                                        // exceeds MAX_CAPS.
+
+      if(Verbosity > 0)
+	{
+	  cout << "Have read " << lineNum << "." << endl;
+	  cout << "   Calling gotoCheck." << endl;
+	}
+      
+      gotoCheck(lineNum, buffer);        // search for possible 
+                                        // 'goto' statements.
+
+      if(Verbosity > 0)
+	{
+	  cout << "Have read " << lineNum << "." << endl;
+	  cout << "   Calling commentCheck." << endl;
+	}
+      
+      commentCheck(lineNum, buffer);    // make sure all '//' comments are 
+                                        // surrounded by whitespace.
+       
+      if(Verbosity > 0)
+	{
+	  cout << "Have read " << lineNum << "." << endl;
+	  cout << "   Calling dumbReadLine." << endl;
+	}
+      
+      dumbReadLine(cin, buffer, BUFF_SIZE);
+                                        // read line from file to buffer.  
+  }
+  
+  if(Verbosity > 0)
+    {
+      cout << "Have read " << lineNum << "." << endl;
+      cout << "   Exiting main." << endl;
+    }
+  return(1);
+
+}
+
+/* 
+ * Checks the length of the buffer, reporting an error message if it exceeds
+ * MAX_LENGTH characters.
+ */
+
+void lenCheck(int lineNum, char buffer[])
+{
+  
+  if(Verbosity > 0)
+    {
+      cout << "   Entered lenCheck." << endl;
+    }
+
+  int currentPosition = 0;                     // keeps track of how
+                                               // much of the buffer
+                                               // has been counted
+
+  int charCount = 0;                           // counts the width of 
+                                               // the current buffer
+  
+
+  while(buffer[currentPosition] != '\n')       // while not at the end of
+                                               // the buffer, keep counting
+                                               // the buffer length
+    {
+      // Verbosity++;
+      if(Verbosity > 1)
+	{
+	  cout << "      Entered lenCheck while loop." << endl;
+	  cout << "      Line:  " << lineNum;
+	  cout << "      Position:  " << currentPosition;
+	}
+      
+      
+      if(buffer[currentPosition] != '\t')      // if the current char not a tab
+	{
+	  // Verbosity++;
+	  if(Verbosity > 2)
+	    {
+	      cout << "      lenCheck/while/if(!\t)." << endl;
+	    }
+
+	  charCount++;                         // increment the known length
+	
+	  // Verbosity--;
+	}
+
+      else                                     // current character is a tab
+	{
+
+	  if(currentPosition == 0)             // if in the first space, 
+             	                               // tab will insert 
+                                   	       // TAB_WIDTH spaces.
+	    {
+	      // Verbosity++;
+	      if(Verbosity > 2)
+		{
+		  cout << "      lenCheck/while/else(\t)/if." << endl;
+		}
+	      
+	      charCount += TAB_WIDTH;
+	    
+	      // Verbosity--;
+	    }
+
+	  else
+	    {
+	      // Verbosity++;
+	      if(Verbosity > 2)
+		{
+		  cout << "      lenCheck/while/else(\t)/else." << endl;
+		}
+
+	      charCount += TAB_WIDTH - (charCount % TAB_WIDTH);
+       	                                      // amount of space inserted
+	                                      // by a tab will be the width
+   	                                      // of a tab minus the number of
+	                                      // spaces ahead of the last 
+	                                      // tab stop.
+	      // Verbosity--;
+	    }
+
+	}
+      
+      currentPosition++;
+
+      if(Verbosity > 1)
+	{
+	  cout << "      Exiting lenCheck while loop." << endl;
+	}
+
+      // Verbosity--;
+    }
+	  
+  
+  if(charCount > MAX_LENGTH)                  // if the maximum allowed length
+                                              // is exceeded, print warning.
+    {
+      // Verbosity++;
+      if(Verbosity > 1)
+	{
+	  cout << "      Entering warning output." << endl;
+	}
+
+      cout << "Line " << lineNum << " is too long: ";  
+      cout << charCount << " characters." << endl;
+      
+      // Verbosity--;
+    }
+
+  if(Verbosity > 0)
+    {
+      cout << "Finished lenCheck." << endl;
+    }
+  
+  return;
+}
+
+/*
+ * Checks strings of capital letters (and whitespace enclosed by them) to 
+ * ensure their length doesn't exceed MAX_CAPS.
+ */
+
+void capsCheck(int lineNum, char buffer[])
+{
+  
+  int currentPosition = 0;
+  int capsCount = 0;
+  int spaceCount = 0;
+
+  
+  //  Verbosity++;
+
+  if(Verbosity > 0)
+    {
+      cout << "Entered capsCheck." << endl;
+    }
+
+  while(buffer[currentPosition] != '\n')
+    {
+      // Verbosity++;
+            
+      if(Verbosity > 0)
+	{
+	  cout << "Entered capsCheck while loop." << endl;
+	}
+      
+      if(
+      
+      
+      // Verbosity--;
+
+      currentPosition++;
+    
+    }
+
+  if(Verbosity > 0)
+    {
+      cout << "Exiting capsCheck while loop." << endl;
+      cout << "Finished capsCheck." << endl;
+    }
+
+
+  // Verbosity--;
+
+  return;
+
+}
+
+/*
+ * Checks for the string 'goto' surrounded by non alpha-numerics.
+ */
+
+void gotoCheck(int lineNum, char buffer[])
+  /*
+   * This function searches the buffer for a lower-case 'g'.  If found,
+   * the function checks to see if the g is followed by 'oto'. It also
+   * ensures that the 'goto' is not preceded or followed by alpha-
+   * numeric characters.
+   */
+
+{
+  
+  int currentPosition = 0;                     // keeps track of how
+                                               // much of the buffer
+                                               // has been counted
+  
+
+  // Verbosity++;
+
+  if(Verbosity > 0)
+    {
+      cout << "Entered gotoCheck." << endl;
+    }
+
+
+  while(buffer[currentPosition] != '\n')       // while not at the end of
+                                               // the buffer, keep counting
+                                               // the buffer length
+    {
+      
+      // Verbosity++;
+            
+      if(Verbosity > 0)
+	{
+	  cout << "Entered gotoCheck while loop." << endl;
+	}
+
+
+      if(buffer[currentPosition] == 'g')
+	
+	/* Occurrence of 'g' begins goto test structure. */
+	
+	{
+	  if(Verbosity > 1)
+	    {
+	      cout << "   Entered gotoCheck test structure." << endl;
+	    }
+	  
+	  if(currentPosition != 0)
+	    
+	    /* 
+	     * Avoid out of array bounds testing for alpha-numeric. 
+	     * The if structure below references buffer[currentPosition - 1]).
+	     * If currentPosition = 0, this will result in an error.  
+	     */
+	    
+	    {
+
+	      if(Verbosity > 2)
+		{
+		  cout << "      gotoCheck: currentPosition != 0" << endl;
+		}
+	      
+	      
+	      if( (!isalnum(buffer[currentPosition - 1])) && 
+		                               // previous char is not
+		                               // alpha-numeric.
+		  (buffer[currentPosition + 1] == 'o') &&
+		  (buffer[currentPosition + 2] == 't') &&
+		  (buffer[currentPosition + 3] == 'o') &&
+		                               // appearance of 'goto'
+		  (!isalnum(buffer[currentPosition + 4])) )
+	 	                               // trailing char is not
+		                               // alpha-numeric.
+	
+		/* Test for occurrence of possible 'goto' command. */
+		
+		{
+		  cout << "Line " << lineNum;
+		  cout << " seems to contain a goto statement." << endl;
+		                               // print warning message.
+		  return;
+		}
+	    
+	    }
+	  
+          else
+	
+	    /* 'g' is first character on the line. */
+	    
+	    {
+
+	      if(Verbosity > 2)
+		{
+		  cout << "      gotoCheck: currentPosition == 0" << endl;
+		}
+
+
+	      if( (buffer[currentPosition + 1] == 'o') &&
+		  (buffer[currentPosition + 2] == 't') &&
+		  (buffer[currentPosition + 3] == 'o') &&
+		                               // appearance of 'goto'
+		  (!isalnum(buffer[currentPosition + 4])) )
+	 	                               // trailing char is not
+		                               // alpha-numeric.
+		
+		/* Test for occurrence of possible 'goto' command. */
+		
+		{
+
+		  cout << "Line " << lineNum;
+		  cout << " seems to contain a goto statement." << endl;
+		                               // print warning message.
+		  return;
+
+		}
+	   
+	    }
+
+	}
+      
+      // Verbosity--;
+
+      currentPosition++;
+    
+    }  
+  
+  
+  if(Verbosity > 0)
+    {
+      cout << "Exiting gotoCheck while loop." << endl;
+      cout << "Finished gotoCheck." << endl;
+    }
+
+  // Verbosity--;
+  
+  return;
+}
+
+
+
+/*
+ * Checks for all '//' comments, reporting an error when they are not
+ * surrounded by whitespace.
+ */
+
+void commentCheck(int lineNum, char buffer[])
+{
+  
+  int currentPosition = 0;                     // keeps track of how
+                                               // much of the buffer
+                                               // has been counted
+
+  //  Verbosity++;
+
+  if(Verbosity > 0)
+    {
+      cout << "Entered commentCheck." << endl;
+    }
+
+
+  while(buffer[currentPosition] != '\n')       // while not at the end of
+                                               // the buffer, keep counting
+                                               // the buffer length
+    {
+      
+      // Verbosity++;
+            
+      if(Verbosity > 0)
+	{
+	  cout << "Entered commentCheck while loop." << endl;
+	}
+
+
+      if(buffer[currentPosition] == '/')
+	
+	/* Occurrence of '/' begins comment test structure. */
+	
+	{
+	  if(Verbosity > 1)
+	    {
+	      cout << "   Entered commentCheck test structure." << endl;
+	    }
+	  
+	  if(currentPosition != 0)
+	    
+	    /* 
+	     * Avoid out of array bounds testing for whitespace. 
+	     * The if structure below references buffer[currentPosition - 1]).
+	     * If currentPosition = 0, this will result in an error.  
+	     */
+	    
+	    {
+
+	      if(Verbosity > 2)
+		{
+		  cout << "      commentCheck: currentPosition != 0" << endl;
+		}
+	       
+	      if( ((!isspace(buffer[currentPosition - 1])) ||
+		  (!isspace(buffer[currentPosition + 2]))) &&
+		                           // appearance of '//' not 
+		                           // surrounded by whitespace
+		  (buffer[currentPosition + 1] == '/')   )
+		
+		/*
+		 * Test for possible occurrances of '//' not 
+		 * surrounded by whitespace.
+		 */
+		
+		{ 
+		 
+		  cout << "Line " << lineNum;
+		  cout << " contains a // comment without";
+		  cout << " surrounding whitespace." << endl;
+
+		  return;                 // found an unspaced comment, done.
+
+		}
+	    }
+       
+	  else
+	    /* '/' found at the beggining of the buffer. */
+	    {
+
+	      if(Verbosity > 2)
+		{
+		  cout << "      commentCheck: currentPosition == 0" << endl;
+		}	       
+	      
+	      if( (buffer[currentPosition + 1] == '/')   &&
+		  (!isspace(buffer[currentPosition + 2]))  )
+		                           // appearance of '//' not 
+		                           // surrounded by whitespace
+
+		/* 
+		 * Test for possible occurrances of '//' not 
+		 * surrounded by whitespace.
+		 */
+		
+		{ 
+		 
+		  cout << "Line " << lineNum;
+		  cout << " contains a // comment without";
+		  cout << " surrounding whitespace." << endl;
+		  
+		  return;                 // found an unspaced comment, done.
+		  
+		}
+
+	    }
+	  
+	}
+      
+      // Verbosity--;
+      
+      currentPosition++;
+ 
+    }
+  
+  if(Verbosity > 0)
+    {
+      cout << "Exiting commentCheck while loop." << endl;
+      cout << "Finished commentCheck." << endl;
+    }
+
+  // Verbosity--;
+
+  return;
+
+}

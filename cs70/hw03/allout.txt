@@ -1,0 +1,123 @@
+
+Commands are:
+  quit: terminate program
+  help: print this message
+  student: add new student
+  course: add new course
+  enroll: enroll student in course
+  drop: drop student from course
+  hair: change student's hair color
+  time: change course's meeting time
+  show students: display all students
+  show courses: display all courses
+
+Your command? First name? Last name? Hair color? 
+Your command? First name? Last name? Hair color? 
+Your command? First name? Last name? Hair color? 
+Your command? First name? Last name? Hair color? 
+Your command? First name? Last name? Hair color? 
+Your command? First name? Last name? Hair color? 
+Your command? First name? Last name? New hair color? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? 
+Your command? Sample, Fred, blond hair
+	0 courses:
+Blow, Joe, brown hair
+	0 courses:
+Silly, Sally, green hair
+	0 courses:
+Merriweather, Alfred, yellow hair
+	0 courses:
+Sleepy, Sam, purple hair
+	0 courses:
+Johnson, Jerry, red hair
+	0 courses:
+
+Your command? CS70 meets TT 1:15
+	Roster:
+CS134 meets MW 2:45
+	Roster:
+MATH55 meets MTWTF 8:00
+	Roster:
+HUM13 meets MTWTF 9:00
+	Roster:
+HUM22 meets MTWTF 10:00
+	Roster:
+PHYS19 meets MTTF 11:00
+	Roster:
+CHEM1 meets M 4:00
+	Roster:
+
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? Course CS134 is full, can't add another student
+
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? Course CS134 is full, can't add another student
+
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Student Sample, Fred is at maximum load, can't add another course
+
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Department? Course number? 
+Your command? First name? Last name? Student Simple, Fred was not found
+
+Your command? First name? Last name? Department? Course number? Course PHY19 was not found
+
+Your command? Department? Course number? New meeting days? New meeting time? 
+Your command? First name? Last name? Hair color? Student Sample, Fred is already in the database
+
+Your command? Department? Course number? Meeting days? Meeting time? Maximum enrollment? Course CS70 is already in the database
+
+Your command? Unrecognized command 'badcommand'.  Try again.
+
+Your command? Unrecognized argument to 'show' command: 'whom'
+
+Your command? Sample, Fred, blond hair
+	5 courses: CS70 HUM13 HUM22 MATH55 CHEM1
+Blow, Joe, brown hair
+	1 course: CS70
+Silly, Sally, green hair
+	1 course: CS134
+Merriweather, Alfred, yellow hair
+	1 course: CS134
+Sleepy, Sam, purple hair
+	0 courses:
+Johnson, Jerry, red hair
+	1 course: CS134
+
+Your command? CS70 meets TT 1:15
+	Roster:
+	Blow, Joe
+	Sample, Fred
+CS134 meets MW 2:45
+	Roster:
+	Johnson, Jerry
+	Merriweather, Alfred
+	Silly, Sally
+MATH55 meets MTWTF 8:00
+	Roster:
+	Sample, Fred
+HUM13 meets MTWTF 9:00
+	Roster:
+	Sample, Fred
+HUM22 meets MTWTF 10:00
+	Roster:
+	Sample, Fred
+PHYS19 meets MTTF 11:00
+	Roster:
+CHEM1 meets TT 3:00
+	Roster:
+	Sample, Fred
+
+Your command? 

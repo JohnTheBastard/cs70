@@ -1,0 +1,8 @@
+i L 1234566 1 1 1901 Geoff Kuenning's mom
+i R 1234567 1 1 1901 Geoff Kuenning's dad
+p i M 1234566 1 1 1875 Geoff Kuenning's grandma
+i M 1234567 1 1 1922 Geoff Kuenning
+i N 7654320 2 14 1924 Jon Strauss's dad
+i N 7654321 2 14 1944 Jon Strauss
+i O 7654321 2 14 1924 Jon Strauss's mom
+p

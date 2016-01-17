@@ -1,0 +1,6 @@
+Line 1 is too long: 134 characters.
+Line 2 is too long: 82 characters.
+Line 2 seems to contain a goto statement.
+Line 3 contains a // comment without surrounding whitespace.
+Line 4 has a string of 52 capital letters and spaces.
+Line 5 is too long: 91 characters.

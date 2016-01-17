@@ -1,0 +1,305 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 10
+Date:	        17 April, 2004
+
+
+--------------------
+ Purpose of Program 
+--------------------
+
+  This program implements a basic spell checker. It uses a
+command-line specified file as a dictionary and then accepts input
+from the standard input (keyboard or piped in from the command line). 
+Unrecognized words are output along with 0 or more possible corrections.
+
+------------
+ I/O Format 
+------------
+
+INPUT: 
+%>./assign_10 <dictionary file> [< input file]
+
+  The user must specify a file to be used as the dictionary on the
+command line. On the command line, an optional input file can be
+specified to be checked against the dictionary for errors. If no file
+is specified, input is processed from the keyboard until the user
+enters CTRL-D or quits.
+
+
+OUTPUT: 
+
+  Any word found in the input that does not match a word in the
+dictionary is output. Additionally, 0 or more possible corrections to
+the unrecognized word are printed. These corrections simply differ
+from the unknown word by a single character.
+
+
+-------------------
+ General Structure 
+-------------------
+
+This program is contained within 7 files.
+
+These are:
+assign_10.cc		Implementation of the spell checker.		
+hashfuncs.*		Various hash functions. Our program uses FNVHash.
+hashtable.cc		Implementation of the hash table.
+hashtable.hh		Header for the hash table.
+list.cc			Implementation of the templated List class.
+list.hh			Header for the templated List class.
+
+The hashfuncs files were supplied for this assignment. For information
+on them, see their own documentation.
+
+METHODS:
+
+We implemented the following public methods:
+
+List Functions:
+
+List<OBJECT>::List()
+
+  Default constructor.
+	
+
+List<OBJECT>::List(const List<OBJECT>& source)
+
+  Copy constructor.
+
+
+List<OBJECT>::~List()
+
+  Destructor.
+
+
+List<OBJECT>& List<OBJECT>::operator= (const List<OBJECT>& source)
+
+  Assignment operator - deletes all data currently stored in the
+list. Then all values from the source list are pushed on to this list
+and it is returned.
+
+
+OBJECT List<OBJECT>::popHead()
+
+  Removes and returns the first value from the list and deletes the
+node storing it. The next node is now marked as the head. If no data is in the
+list, an error message is printed.
+
+
+OBJECT& List<OBJECT>::peekHead()
+
+  Returns the value on the head node of the list without actually removing it
+from the list. Returns by reference, allowing data modification.
+
+void List<OBJECT>::pushHead(OBJECT value)
+
+  Pushes the given object on to the head of the list.
+
+void List<OBJECT>::pushTail(OBJECT value)
+
+  A new node storing value is created and placed on the tail of the
+list. The tail pointer is modified accordingly.
+
+OBJECT& List<OBJECT>::peekTail()
+
+  Returns the value on the tail node of the list without actually removing it
+from the list. Returns by reference, allowing data modification.
+
+
+int List<OBJECT>::length() const
+
+  Returns the length of the list in O(1) time.
+
+
+List<OBJECT>::Node::Node()
+
+  Default Node constructor.
+
+
+List<OBJECT>::Node::~Node()
+
+  Node destructor.
+
+
+ListIterator<OBJECT>::ListIterator(const List<OBJECT>& source)
+
+  ListIterator constructor - the List over which to iterate is specified.
+
+
+ListIterator<OBJECT>::ListIterator(const ListIterator<OBJECT>& source)
+
+  ListIterator copy constructor.				      
+
+
+ListIterator<OBJECT>::~ListIterator()
+
+  ListIterator destructor.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>
+::operator= (const ListIterator<OBJECT>& source)
+
+  ListIterator assignment operator.
+
+
+ListIterator<OBJECT>::operator bool() const
+
+  Returns true if there are remaining elements in the List to
+iterate over. False otherwise.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>::operator++ ()
+
+  Pre-increment operator - Moves to the next element in the 
+List if there is one. Prints an error if there are no more
+remaining elements to iterate over.
+
+
+OBJECT& ListIterator<OBJECT>::operator* ()
+
+  Returns the value stored in the node of the current position. This
+value may be modified without invalidating the iterator.
+
+
+HashTable Functions: 
+
+
+HashTable::HashTable()
+
+  Default constructor allocates memory for array of pointers to Lists.
+
+
+HashTable::HashTable(const HashTable& source)
+
+  Copy constructor.
+
+
+HashTable::~HashTable()
+
+  Destructor. Frees all memory associated with the hash table and
+associated Lists.
+
+
+HashTable& HashTable::operator= (const HashTable& source)
+
+  Assignment operator. First empties the current hash table and frees
+its memory, then copies the source hash table.
+
+
+bool HashTable::insert(string key)
+
+  Insert the key string in to the current hash table. True if the key
+isn't already in the table.
+
+  
+string* HashTable::lookUp(string key)
+
+  Returns a pointer to the key string in the hash table. If the key is
+not found, NULL is returned.
+
+
+void HashTable::printStats()
+
+  Prints out vital statistics for the hash table to cerr. This
+includes the load factor for the table, the number of elements stored,
+the amount of spaces allocated, the number of collisions, and the
+longest chain present.
+
+
+void HashTable::doubleSize()
+
+  Resizes the hash table when the load factor exceeds the specified
+threshold. First rehashes all elements in the table into a second,
+larger table, then deletes memory associated with the smaller table.  
+  
+
+long HashTable::getPrime()
+
+  Returns the next prime roughly twice as large as the current table
+size. This is done to ensure good hash function performance.
+
+assign_10.cc Functions
+
+HashTable* getFile(char* fileName)
+
+  Reads the specified file in, places its contents into a hash table,
+and returns a pointer to this hash table. Caller is responsible for
+freeing associated memory.
+
+ 
+void corrections(HashTable& dictionary, string word, 
+		 List<string*>& correctList)
+
+  Compares the string word to the elements present in the
+dictionary. It fills the correctList with possible corrections to the
+word. These possible corrections differ from the string word by a
+single character.
+
+
+int main(int argc, char* argv[])
+
+  Calls helper functions to spell check. Inside main, input words are
+checked against the dictionary. If they are not found, the corrections
+function is called and output is generated.
+
+  
+DATA STRUCTURES:
+
+List
+
+  Templated linked list of Nodes, which store OBJECTs. Stores only pointers to
+the head and tail of the list and the length of the list. The only requirement
+for the OBJECT given to the list is that it has an implementation of the
+assignment operator.
+
+
+Node
+
+  Element of a templated linked list of OBJECTs. Contains the data stored and a
+pointer to the next Node in the list.
+
+
+ListIterator
+
+  Iterates over a List. It stores a pointer to the current element
+and can return its value (allowing the user to modify the data).
+
+HashTable
+
+  A simple hash table class. Uses the FNVHash function (supplied for
+this assignment, see hashfuncs.* for details). Handles collisions by
+separate chaining. Data is stored in a variable size array of pointers
+to Lists. 
+
+
+ALGORITHMS:
+
+  The two main algorithms used for this program are the FNVHash
+function, which was supplied (for documentation see hashfuncs.*) and
+the generation of possible corrections for unrecognized words. 
+ 
+  Our method of finding possible corrections involves only searching
+for words that differ by a single character from the unrecognized
+word. For every character in the unknown word, we substitute all
+characters 'a'-'z' and see if that substitution results in a word. If
+it does, we include it as a possible correction. We do not search for
+multiple errors in a single word.
+
+
+---------------------------------------
+ Limitations and Possible Improvements 
+---------------------------------------
+
+  In its current form, this spell checker has several
+shortcomings. First, it does not handle punctuation at all. Any
+punctuated word is automatically considered to be misspelled. Along
+with this, upper case letters (other than the first character of a
+word) are not properly handled.  Another area for improvement is the
+generation of likely corrections. Our algorithm only searches for
+single mistakes and does not include common errors such as character
+transposition. Missing or extra characters are also
+unrecognized. The spell checker also fails to offer any method for
+changing misspelled words, it only notifies you of the error. Finally,
+the method of input to the spell checker is a bit clumsy, as on every
+run the user must specify a dictionary  file and pipe in an input file.

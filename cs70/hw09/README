@@ -1,0 +1,334 @@
+Names:  	John Hearn and Russ Osborn
+Email:  	jhearn@hmc.edu  and rosborn@hmc.edu
+Assignment:	CS 70, Assignment 9
+Date:	        14 April, 2004
+
+
+--------------------
+ Purpose of Program 
+--------------------
+
+  This program implements a Vignere cipher. It takes as a command line
+argument at least one file, along with a flag specifying encryption or
+decryption. The user then supplies a password which is used to encode
+or decode the information in the file.
+
+------------
+ I/O Format 
+------------
+
+INPUT: 
+%>./assign_09 [flags] <filename>
+
+  There are three allowed flags: -e, -g (n), and -d. The -e flag specifies
+that the file given is to be encrypted. The -g flag specifies the
+group size for the output of an encrypted file. The -d flag indicates
+that the file given is to be decrypted.
+
+
+OUTPUT: 
+
+  The result of the cipher is printed to the screen. If the file is to
+be encrypted, the encrypted file is printed. If the -g flag is used,
+the output is grouped in specified numbers with whitespace in
+between. If the file is to be decrypted, the decrypted file is printed
+to the screen. It has been modified slightly; the characters are all
+upper case and any space or non alpha numeric characters have been
+replaced with '.'.
+
+
+
+-------------------
+ General Structure 
+-------------------
+
+This program is contained within 5 files.
+
+These are:
+assign_09.cc		Main program; implements Vignere cipher.
+chunkystring.cc		Implementation of the ChunkyString class.
+chunkystring.hh		Header for the ChunkyString class.
+list.cc			Implementation of the templated List class.
+list.hh			Header for the templated List class.
+
+METHODS:
+
+We implemented the following public methods:
+
+List Functions:
+
+List<OBJECT>::List()
+
+  Default constructor.
+	
+
+List<OBJECT>::List(const List<OBJECT>& source)
+
+  Copy constructor.
+
+
+List<OBJECT>::~List()
+
+  Destructor.
+
+
+List<OBJECT>& List<OBJECT>::operator= (const List<OBJECT>& source)
+
+  Assignment operator - deletes all data currently stored in the
+list. Then all values from the source list are pushed on to this list
+and it is returned.
+
+
+OBJECT List<OBJECT>::popHead()
+
+  Removes and returns the first value from the list and deletes the
+node storing it. The next node is now marked as the head. If no data is in the
+list, an error message is printed.
+
+
+OBJECT& List<OBJECT>::peekHead()
+
+  Returns the value on the head node of the list without actually removing it
+from the list. Returns by reference, allowing data modification.
+
+void List<OBJECT>::pushHead(OBJECT value)
+
+  Pushes the given object on to the head of the list.
+
+void List<OBJECT>::pushTail(OBJECT value)
+
+  A new node storing value is created and placed on the tail of the
+list. The tail pointer is modified accordingly.
+
+OBJECT& List<OBJECT>::peekTail()
+
+  Returns the value on the tail node of the list without actually removing it
+from the list. Returns by reference, allowing data modification.
+
+
+int List<OBJECT>::length() const
+
+  Returns the length of the list in O(1) time.
+
+
+List<OBJECT>::Node::Node()
+
+  Default Node constructor.
+
+
+List<OBJECT>::Node::~Node()
+
+  Node destructor.
+
+
+ListIterator<OBJECT>::ListIterator(const List<OBJECT>& source)
+
+  ListIterator constructor - the List over which to iterate is specified.
+
+
+ListIterator<OBJECT>::ListIterator(const ListIterator<OBJECT>& source)
+
+  ListIterator copy constructor.				      
+
+
+ListIterator<OBJECT>::~ListIterator()
+
+  ListIterator destructor.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>
+::operator= (const ListIterator<OBJECT>& source)
+
+  ListIterator assignment operator.
+
+
+ListIterator<OBJECT>::operator bool() const
+
+  Returns true if there are remaining elements in the List to
+iterate over. False otherwise.
+
+
+ListIterator<OBJECT>& ListIterator<OBJECT>::operator++ ()
+
+  Pre-increment operator - Moves to the next element in the 
+List if there is one. Prints an error if there are no more
+remaining elements to iterate over.
+
+
+OBJECT& ListIterator<OBJECT>::operator* ()
+
+  Returns the value stored in the node of the current position. This
+value may be modified without invalidating the iterator.
+
+
+ChunkyString Functions
+
+ 
+ChunkyString::ChunkyString()
+
+  Default Constructor for a ChunkyString. Length set to 0.
+
+ChunkyString::ChunkyString(const ChunkyString& source)
+
+  Copy constructor for ChunkyString. Copies all data and length from
+the source.
+
+ChunkyString::~ChunkyString()
+
+  Destructor
+  
+ChunkyString& ChunkyString::operator= (const ChunkyString& source)
+  
+  Assignment operator. Copies all data from source.
+
+ChunkyString& ChunkyString::operator+= (const char addition);
+  
+  Add the parameter character to the end of the ChunkyString.
+  
+int ChunkyString::length()
+
+  Return the length of the ChunkyString (how many characters it holds)
+in O(1) time.
+
+ostream& ChunkyString::print(ostream& stream) const
+
+  Print out the ChunkyString contents. 
+
+ChunkyStringIterator::ChunkyStringIterator(const ChunkyString& source)
+
+  Create a new ChunkyStringIterator starting at the given
+ChunkyString's beginning.
+
+ChunkyStringIterator::~ChunkyStringIterator()
+
+  Destructor
+
+
+ChunkyStringIterator::operator bool()
+
+  True if the iterator can still be incremented.
+
+ChunkyStringIterator::ChunkyStringIterator& operator++ ();
+
+  Move the iterator to the next character in the ChunkyString.
+
+char& ChunkyStringIterator::operator* ()
+
+  Return the current character pointed at by reference, allowing it to
+be modified.
+
+void ChunkyStringIterator::reinitialize(ChunkyString chunkS)
+
+  Sets this iterator to the beginning of the specified source ChunkyString.
+  
+
+assign_09.cc Functions
+
+
+static int processOptions(int argc, char* argv[], bool& encryptFile, 
+				bool& decryptFile, int& groupSize)
+
+  Process the command line options, calling the usage functions when
+the user has committed a violation of the program rules.
+
+static void usage(char* progname)
+
+  Print a message that informs the user of valid command line options
+because they have tried to do something bad.
+
+ChunkyString* cipher(ChunkyString* password,ChunkyString* chunkedFile, 
+		     bool encrypt);
+
+  Based on a user supplied password, a file from input processed into an 
+all-caps ChunkyString, and a boolean specifying encryption or
+decryption, this function uses a Vignere cipher to encrypt the data.
+
+
+ChunkyString* getPassword()
+
+  Prompts the user for a password and uppercases it, making memory for
+a new ChunkyString and returning a  pointer to it.
+
+ChunkyString* fileReader(istream& file, bool encrypt)
+
+  Given an input file,and boolean specifying encryption/decryption,
+makes memory for a new ChunkyString and inserts the file contents.
+
+static void output(ChunkyString* chunkOut, const int groupSize)
+
+  Outputs a given ChunkyString based on the user given groupSize,
+ensuring groups are preserved across new lines. If groupSize is
+unspecified, 0 is the default. 
+
+
+  
+DATA STRUCTURES:
+
+List
+
+  Templated linked list of Nodes, which store OBJECTs. Stores only pointers to
+the head and tail of the list and the length of the list. The only requirement
+for the OBJECT given to the list is that it has an implementation of the
+assignment operator.
+
+
+Node
+
+  Element of a templated linked list of OBJECTs. Contains the data stored and a
+pointer to the next Node in the list.
+
+
+ListIterator
+
+  Iterates over a List. It stores a pointer to the current element
+and can return its value (allowing the user to modify the data).
+
+ChunkyString
+
+  Stores a list of characters in a series of Chunks (each of which
+store a small array of characters themselves). Supports all the normal
+operations of a string, but does so in a way that is dynamically
+extendible and a balance between a linked list and an array.
+
+Chunk
+
+  Stores a short array of characters and a length value. Used in the
+ChunkyString class to store a long string.
+
+ChunkyStringIterator
+
+  Iterates over a ChunkyString, allowing the user to view and modify
+the stored data. 
+
+ALGORITHMS:
+
+  The key algorithm for this assignment was the cipher function. A
+complete description of the method can be found on the CS 70 Spring
+2004, Assignment #9 webpage. The basic methodology is as follows:
+
+  For encryption, the file to be encrypted is read in and the user
+supplies a password to encrypt it. The data to be encrypted is shifted
+(as in a Caesar Shift) by a variable amount, based on the password (1
+for A, 2 for B, etc.). When the end of the password string is reached,
+it is looped over again repetitively (cs fun becomes cs funcs funcs
+fun...). Any alpha numeric character is converted to uppercase. Any
+non alpha numeric becomes '.'.
+  To decrypt, the opposite is done. The file is read in, and based on
+the user password, the data is reverse shifted by the password
+value. The '.' present in encrypted data becomes ' ', but the
+characters remain in upper case.
+
+
+---------------------------------------
+ Limitations and Possible Improvements 
+---------------------------------------
+
+  This program is not a very useful cipher. Unless truly random, one
+time keys are used, the encryption is not secure. 
+  Additionally, our current method does not allow non alpha numeric
+characters to be preserved through encryption and decryption. Related
+to this, all alpha numeric characters become upper case. 
+  Our program currently only outputs to the screen, which can make it
+difficult to store encrypted data for a long time. 
+  Finally, the password is printed to the screen as the user types it,
+making it possible for anyone watching to steal the stored information.

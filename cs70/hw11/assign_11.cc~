@@ -1,0 +1,141 @@
+/*
+ * File:       assign_11.cc
+ * Author:     John Hearn and Russ Osborn
+ * Date:       23 April, 2004
+ * CS70 Spring 2004 Assignment #11
+ *
+ *
+ */
+
+
+
+#include <iostream>
+#include <string>
+#include "tree.hh"
+
+using namespace std;
+
+void binaryProcessor(char command, Tree* database);
+
+int main(int, char*)
+{
+  char command;
+  Tree* database = new Tree;
+
+  while (cin.read((char*) &command, sizeof command))
+    {
+      binaryProcessor(command, database);      
+    }
+  
+  return 0;
+
+}
+
+void binaryProcessor(char command, Tree* database)
+{
+  
+  if (command == 'p')
+    {
+      database->print();
+      return;
+    }
+
+  
+  char prefix;
+  unsigned int number;
+
+  cin.read((char*) &prefix, sizeof prefix);
+  if(!cin)
+    {
+      cerr << "Bad prefix input.  Aborting." << endl;
+      abort();
+    }
+  
+  cin.read((char*) &number, sizeof number);
+  if(!cin)
+    {
+      cerr << "Bad number input.  Aborting." << endl;
+      abort();
+    }
+
+  unsigned int nameLength;
+  string name;
+
+  if (command == 'i')
+    {
+      
+      cin.read((char*) &nameLength, sizeof nameLength);
+      if(!cin)
+	{
+	  cerr << "'i' bad nameLength input.  Aborting." << endl;
+	  abort();
+	}
+      
+      char* buffer = new char[nameLength];
+      
+      cin.read(buffer, nameLength);
+      if(!cin)
+	{
+	  cerr << "'i' bad name input.  Aborting." << endl;
+	  abort();
+	}
+      
+      name = buffer;
+      delete[] buffer;
+    }
+
+  unsigned char month;
+  unsigned char day;
+  unsigned short year;
+
+  if (command == 'i' || command == 'a')
+    {
+
+      cin.read((char*) &month, sizeof month);
+      if(!cin)
+	{
+	  cerr << "'i' or 'a' bad month input.  Aborting." << endl;
+	  abort();
+	}
+      
+      cin.read((char*) &day, sizeof day);
+      if(!cin)
+	{
+	  cerr << "'i' or 'a' bad day input.  Aborting." << endl;
+	  abort();
+	}
+      
+      cin.read((char*) &year, sizeof year);
+      if(!cin)
+	{
+	  cerr << "'i' or 'a' bad prefix input.  Aborting." << endl;
+	  abort();
+	}
+    }
+
+  switch (command)
+	{
+	case 'i':
+	  {
+	    database->insert(prefix, number, name, month, day, year);
+	    return;
+	  }
+	case 'r':
+	  {
+	    database->remove(prefix, number);
+	    return;
+	  }
+	case 'f':
+	  {
+	    database->find(prefix, number);
+	    return;
+	  }
+	case 'a':
+	  {
+	    database->ageCheck(prefix, number, month, day, year);
+	    return;
+	  }
+	}
+  cerr << "Switch failed. Aborting." << endl;
+  abort();
+}

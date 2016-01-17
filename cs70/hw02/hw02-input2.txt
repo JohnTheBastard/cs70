@@ -1,0 +1,103 @@
+This file tests all of the nasty boundary cases for homework 2.
+
+The above line is the first test: does the program stop when it sees an
+empty line?
+
+Now, for the tests in order.
+
+*** Line length:
+This line (9) is 79 characters long.  It shouldn't generate a message. xxxxxxxx
+This line (10) is 80 characters long.  It shouldn't generate a message. xxxxxxxx
+This line (11) is 81 characters long.  It *should* generate a message. xxxxxxxxxx
+The following line (13) contains tabs up to 80 characters.  No message.
+										
+The following line (15) contains tabs up to 80, followed by an x.  Message.
+										x
+The following 8 lines test tabs that follow nonblank characters.  Each
+should give a message (81 characters).
+1	Line 18 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+12	Line 19 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+123	Line 20 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+1234	Line 21 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+12345	Line 22 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+123456	Line 23 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+1234567	Line 24 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+12345678	Line 25 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+The following line double-checks the tab-stop handling in midline.  It
+should give a message (89 characters).
+1	Line 28	1	12	123	1234	12345	123456	1234567	12345678	x
+
+*** All-caps strings:
+
+This line (32) has 9 all-caps characters.  No message.  ABCDEFGHI
+This line (33) has 10 all-caps characters.  No message.  ABCDEFGHIJ
+This line (34) has 11 all-caps characters.  Message.  ABCDEFGHIJK
+This line (35) has a length-12 all-caps string.  Message.  ABCD  FGHIJK
+This line (36) has TWO all-caps strings, one of length 11.  MESSAGE XXX.
+This line (37) has TWO QUITE LONG ALL-CAPS STRINGS, 18 & 12.  Message: 18.
+The following line (40) has leading and trailing spaces, but does not
+violate the all-caps rule.  No message.
+          ABC          
+The following line (43) has leading and trailing spaces, and should be
+reported as having a length-11 all-caps string.
+          ABCDEFGHIJK              
+The following line (46) checks for all-caps detection at the beginning
+of a line.  (End-of-line and mid-line detection were done above.)
+ABCDEFGHIJK
+The following lines (48 & 49) check for all-caps mixed with lowercase.
+ABCdefgHIJK
+ABCDEFGHIJKlmnOPQRSTUVWXYZ
+
+*** Goto statements:
+The tricky thing about goto is the boundary cases: is it caught at the
+beginning and end of a line?  Is it incorrectly caught when surrounded
+by alphanumerics?  Is it caught when surrounded by special characters
+like / and double quote?
+Things that should be caught:
+This line (57) has a goto in the middle.
+This line (58) ends with no period, but a goto
+This line (59) has	goto	inside tabs rather than blanks.
+goto is the first thing on this line (60).
+This line (61) has /goto/ in slashes.
+This line (62) has "goto" in quotes.
+This line (63) has /goto with whitespace only following it.
+This line (64) has goto; with whitespace only preceding it.
+Things that should not be caught:
+This line (66) has xgoto a preceding alphabetic.
+This line (67) has gotox a trailing alphabetic.
+This line (68) has GOTO in uppercase.
+This line (69) has 9goto a preceding numeric.
+This line (70) has goto0 a trailing numeric.
+
+*** Bad // usage:
+Like goto, the boundary cases are the interesting ones.
+Things that should be caught:
+This line (75) has x//x surrounded by alphabetics.
+This line (76) has //x followed by an alphabetic.
+This line (77) has x// preceded by an alphabetic.
+//x This line (78) has // followed by an alphabetic, but at the beginning.
+This line (79) has // preceded by an alphabetic, but at the end. x//
+This line (80) has /// either preceded or followed by a special.
+This line (81) has "//" surrounded by specials.
+This line (82) has 9//9 surrounded by numerics.
+Things that should not be caught:
+This line (84) has // surrounded by whitespace.
+This line (85) has	//	surrounded by tabs.
+This line (86) ends with a legal use of //
+// This line (87) starts with a legal use.
+
+*** Interactions:
+The following lines have multiple problems.  Are they all caught?  Is
+each reported only once?
+This line (92) is too long, CONTAINS A LONG CAPITALS STRING, mentions "goto", and has "//" surrounded by specials!  Is there anything else that could be wrong?
+This line (93) is too long, CONTAINS MORE than ONE LONG CAPITALS STRING, mentions goto twice (goto), has "//" inside specials, and has x//x inside alphabetics.  Whew!
+Things that should not be caught:
+This line (95) has ggoto and gogot and gotgoto and gotogoto.
+Things that detect end-of-line problems:
+This line (97) ends with a short capital SEQUENCE.
+This line (98) ends with just a few CAPITALS
+This line (99) ends with A LONG CAPITAL SEQUENCE.
+This line (100) does not do so.
+
+======================================================================
+This file ends without a newline.  That will exercise "dumbReadLine" more than your own code, but it's still a good test to have.

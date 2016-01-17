@@ -1,0 +1,165 @@
+Authors:  Russell Osborn, John Hearn
+Date:	  20 February, 2004
+CS70 Assignment #5
+
+
+Section C:
+
+5. Q: What happens?
+
+A: Outputs a large decimal number (the result of calling gettimeofday
+on timeval and timezone.
+
+Reports a segmentation fault in the processOptions function at memory address
+0x000125ec.  DDD displays the values of argc, argv (a memory address) and 
+showLineNumbers (@ symbol followed by a memory address).  It gives a line 
+number where the segmentation fault occurred.
+
+In the main window it brings up the code and there is a red arrow at line 150,
+where the segmentation fault was reported.
+
+6. Q: What is shown in the top sub-window?
+
+A: A black box appears with the text:
+1: argv[argNo][0]
+(disabled)
+
+7. Q: (looking at argv[argNo]) What is it?
+
+A: null:  0x0
+
+8. Q: What are argNo and argc?
+
+A: argNo=2
+argc=2
+
+9. Q: Why did the program violate that rule (out of bound array index)?
+
+A: The for loop uses <= when it should use strictly <.
+
+10. Q: What is it (the large number)?
+
+A: 1077315382.115666
+
+
+Section D
+
+13. Q: What output do you see in the bottom window?
+
+A: Couldn't open '/baz/zap': No such file or directory
+
+Program exited with code 01.
+
+15. Q: What happens (when you run with a break point)?
+
+A: The code sub-window shows a green arrow with a stop sign at the point
+where the program stopped executing.
+
+The lower sub-window reports the breakpoint number, the function it is
+in (doShuffling), the values for the relevant variables (argc=3,
+argv=0xffbff774, firstArg=1, showLineNumbers=false), at the current
+line number (367),and has a line of text describing the file location,
+line number and some other numbers and addresses (stack location?).
+
+16. Q: What file is it trying to open?
+
+A: /baz/zap
+
+17. Q: What is argv[argNo]'s value?
+
+A: /foo/bar
+
+18. Q: Why is its value different?
+
+A: because the for loop runs with "argNo = firstArg + 1" when it should be
+"argNo = firstArg".
+
+19. Q: What happens (after edit and recompile)?
+
+A: It stops at the break point.
+
+20: Q: What is argv[argNo]?
+
+A: /foo/bar
+
+Section E
+
+27: Q: What happens when you click the next button?
+
+A: The program continues to the next line in the getLine function.
+
+28: Q: What happens when you click the step button?
+
+A: The program continues to the first line in the call to the expand
+function.
+
+Section F
+
+30. Q: Is the output random?
+
+A: No, the output is exactly the same as the input.
+
+32. Q: Display array. What is its value?
+
+A: array is a pointer to a vector, its address is 0xffbff668.
+ 
+33. Q: Double click on the value of array. What happens?
+
+A: The data stored in 0xffbff668 is displayed. It states that there are
+no data fields.
+
+34. Q: What is the value of M_start?
+
+A: 0x295e0
+
+35. Q: What is displayed?
+
+A: A box with five entries of {...} in a single column is displayed.
+
+36. Q: What do you now see?
+
+A: The box expanded, revealing the data stored in the 5 boxes. This
+includes the line number, the contents, and the hadNewline bool.
+
+37. Q: Do the array values change after one loop iteration?
+
+A: No.
+
+38. Q: What are the values of i and j?
+
+A: Both values are 0.
+
+Section G
+ 
+40. Q: What are the values of i and j now?
+
+A: i is 1, and j is 7.
+
+41. Q: What is in the box now?
+
+A: The box is now filled with line number 8: Its contents are "but" and
+its hadNewline value is true.
+
+42. Q: What happens to the first two elements of array?
+
+A: The first element is now lineNumber 4, which contains "is". The second
+element is still lineNumber 8, which contains "but".
+
+43. Q: What are the 16 words that scroll by (in order)?
+
+A: need
+is
+but
+good
+really
+is
+enough
+we
+file
+this
+pretty
+input
+it
+stupid
+what
+for

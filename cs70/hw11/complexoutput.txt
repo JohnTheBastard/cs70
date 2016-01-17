@@ -1,0 +1,105 @@
+Not found: N3443602
+Not found: E4390447
+Current database:
+-----
+Not found: U3879652
+Attempt to remove nonexistent driver X9244210
+Not found: Z8412405
+Current database:
+Y4695835 Sharon Wlodarski 1/16/1994
+-----
+Not legal on 8/29/1956: L2502725 Cathy Connell 3/21/1981
+Not legal on 6/12/1997: Y4695835 Sharon Wlodarski 1/16/1994
+Not legal on 1/14/1999: Y4695835 Sharon Wlodarski 1/16/1994
+Not found: M7935937
+Not legal on 6/22/1932: E4788774 Jean-Paul Lo 2/16/1971
+Found: B2818217 Davita Yang 1/14/1947
+Not legal on 9/14/1960: E4788774 Jean-Paul Lo 2/16/1971
+Not legal on 5/10/1977: Y4695835 Sharon Wlodarski 1/16/1994
+Not legal on 11/14/1979: Y4695835 Sharon Wlodarski 1/16/1994
+Not legal on 6/17/1977: L2502725 Cathy Connell 3/21/1981
+Not legal on 2/25/1946: B2818217 Davita Yang 1/14/1947
+Current database:
+B2818217 Davita Yang 1/14/1947
+E4113352 Jay Heller 10/7/1953
+L2502725 Cathy Connell 3/21/1981
+U1641255 Blanca Sumner 8/6/1947
+V7032714 Rhonda Brinckerhoff 6/3/1927
+Y4695835 Sharon Wlodarski 1/16/1994
+Y9292492 Patrick Cunningham 4/14/1952
+-----
+Current database:
+B2818217 Davita Yang 1/14/1947
+E4113352 Jay Heller 10/7/1953
+L2502725 Cathy Connell 3/21/1981
+O6610591 Dennis Batrum 6/7/1972
+U1641255 Blanca Sumner 8/6/1947
+V7032714 Rhonda Brinckerhoff 6/3/1927
+Y4695835 Sharon Wlodarski 1/16/1994
+Y9292492 Patrick Cunningham 4/14/1952
+-----
+Legal on 6/7/1992: U1641255 Blanca Sumner 8/6/1947
+Found: Y4695835 Sharon Wlodarski 1/16/1994
+Not legal on 10/26/1958: O6610591 Dennis Batrum 6/7/1972
+Not legal on 11/16/1947: Y9292492 Patrick Cunningham 4/14/1952
+Not legal on 6/25/1995: L2502725 Cathy Connell 3/21/1981
+Not found: R9982696
+Found: U1641255 Blanca Sumner 8/6/1947
+Not found: E4788774
+Attempt to remove nonexistent driver E4113352
+Found: V7032714 Rhonda Brinckerhoff 6/3/1927
+Attempt to remove nonexistent driver X5645990
+Found: B2818217 Davita Yang 1/14/1947
+Not legal on 11/15/1925: T4937922 Nadia Shock 1/5/1946
+Legal on 8/2/1983: T7396024 Kip Borell 6/30/1957
+Found: Y4695835 Sharon Wlodarski 1/16/1994
+Legal on 6/4/1980: T7396024 Kip Borell 6/30/1957
+Not found: J9427512
+Attempt to remove nonexistent driver D3013090
+Not legal on 7/22/1932: P7479039 Fredric Murdock 9/9/1933
+Legal on 7/24/1969: B2818217 Davita Yang 1/14/1947
+Legal on 8/11/1965: V7032714 Rhonda Brinckerhoff 6/3/1927
+Not found: O6502372
+Not found: E4788774
+Not legal on 3/17/1974: L2502725 Cathy Connell 3/21/1981
+Found: U1641255 Blanca Sumner 8/6/1947
+Attempt to remove nonexistent driver U4806793
+Attempt to remove nonexistent driver O6610591
+Legal on 10/27/1999: Y9292492 Patrick Cunningham 4/14/1952
+Not found: E4788774
+Found: B2818217 Davita Yang 1/14/1947
+Not found: E4113352
+Found: H1149547 Junior Anchors 8/8/1970
+Not legal on 6/29/1975: D8472889 Lise Learned 4/12/1963
+Found: U8478857 Lily Ross 8/15/1981
+Not found: S5731705
+Found: J4886901 Dennis Stankosky 1/2/1938
+Not legal on 8/26/1928: D8472889 Lise Learned 4/12/1963
+Not found: U4806793
+Current database:
+A1200894 Matt Norton 5/12/1960
+A8854139 Andrew Lonergan 8/21/1987
+B2818217 Davita Yang 1/14/1947
+C3128394 Margy Dobbs 3/7/1936
+D8472889 Lise Learned 4/12/1963
+E9064061 Josie Medeiros 9/5/1966
+G1102753 Carol Dutkowski 11/9/1935
+H1149547 Junior Anchors 8/8/1970
+H8444253 Liam Sawyer 4/10/1930
+I9940914 Mirell Rowson 12/1/1982
+J4886901 Dennis Stankosky 1/2/1938
+J5201684 Beth Marshburn 9/20/1981
+L2502725 Cathy Connell 3/21/1981
+L6746323 Bryan Sneathern 4/4/1933
+R1619018 Loralin McCarroll 5/26/1928
+T4937922 Nadia Shock 1/5/1946
+T7396024 Kip Borell 6/30/1957
+T9864184 Barney Gifford 1/23/1974
+U1641255 Blanca Sumner 8/6/1947
+U8478857 Lily Ross 8/15/1981
+V7032714 Rhonda Brinckerhoff 6/3/1927
+X1620088 Kurt Steinley 6/14/1944
+Y4695835 Sharon Wlodarski 1/16/1994
+Y7933170 Marianne Witsaman 11/4/1965
+Y9292492 Patrick Cunningham 4/14/1952
+-----
